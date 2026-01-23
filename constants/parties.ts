@@ -1,0 +1,15 @@
+export const parties = [
+  { id: 0, value: '全国', label: '全国' },
+  { id: 1, value: '自由民主党', label: '自由民主党' },
+  { id: 2, value: '中道改革連合', label: '中道改革連合' },
+  { id: 3, value: '立憲民主党', label: '立憲民主党' },
+  { id: 4, value: '日本維新の会', label: '日本維新の会' },
+  { id: 5, value: '公明党', label: '公明党' },
+  { id: 6, value: '国民民主党', label: '国民民主党' },
+  { id: 7, value: '日本共産党', label: '日本共産党' },
+  { id: 8, value: 'れいわ新選組', label: 'れいわ新選組' },
+  { id: 9, value: '参政党', label: '参政党' },
+  { id: 10, value: '日本保守党', label: '日本保守党' },
+  { id: 11, value: '社会民主党', label: '社会民主党' },
+  { id: 12, value: 'チームみらい', label: 'チームみらい' },
+]
