@@ -142,21 +142,24 @@ const MatchPage = () => {
           <RadioGroup
             value={answers[currentStep] || ''}
             onValueChange={handleAnswer}
+            className='flex flex-wrap justify-between'
           >
-            {questions[currentStep].options.map((option) => (
-              <div
-                key={option.value}
-                className='flex items-start space-x-2 p-4 rounded-none border hover:bg-muted/50 cursor-pointer transition-colors'
-                onClick={() => handleAnswer(option.value)}
-              >
-                <RadioGroupItem value={option.value} id={option.value} className='w-4 h-4 mt-1' />
-                <Label
-                  htmlFor={option.value}
-                  className='flex-1 cursor-pointer leading-relaxed'
+            {questions[currentStep].options
+              .filter(option => currentStep !== 1 || option.value.includes(answers[0]))
+              .map(option => (
+                <div
+                  key={option.value}
+                  className='flex w-full sm:w-[49%] items-start space-x-2 p-4 rounded-none border hover:bg-muted/50 cursor-pointer transition-colors'
+                  onClick={() => handleAnswer(option.value)}
                 >
-                  {option.label}
-                </Label>
-              </div>
+                  <RadioGroupItem value={option.value} id={option.value} className='w-4 h-4 mt-1' />
+                  <Label
+                    htmlFor={option.value}
+                    className='flex-1 cursor-pointer leading-relaxed'
+                  >
+                    {option.label}
+                  </Label>
+                </div>
             ))}
           </RadioGroup>
         </CardContent>

@@ -1,6 +1,38 @@
+import { prefectures } from '@/constants/areas'
+import { parties } from '@/constants/parties'
+
 export const questions = [
   {
     id: 0,
+    category: '都道府県',
+    question: 'あなたの住んでいる都道府県は？',
+    options: prefectures.map((prefecture) => ({
+      value: prefecture.value,
+      label: prefecture.label
+    }))
+  },
+  {
+    id: 1,
+    category: '選挙区',
+    question: 'あなたが投票される選挙区は？',
+    options: prefectures.flatMap((prefecture) =>
+      Array.from({ length: prefecture.districts }, (_, idx) => ({
+        value: `${prefecture.value}${idx + 1}区`,
+        label: `${prefecture.label}${idx + 1}区`
+      }))
+    )
+  },
+  {
+    id: 2,
+    category: '政党',
+    question: 'あなたが支持する政党は？',
+    options: parties.map((party) => ({
+      value: party.value,
+      label: party.label
+    }))
+  },
+  {
+    id: 3,
     category: '環境',
     question: '気候変動対策について、あなたの考えに近いのは？',
     options: [
@@ -10,7 +42,7 @@ export const questions = [
     ]
   },
   {
-    id: 1,
+    id: 4,
     category: '経済',
     question: '経済政策について、あなたの考えに近いのは？',
     options: [
@@ -20,7 +52,7 @@ export const questions = [
     ]
   },
   {
-    id: 2,
+    id: 5,
     category: '教育',
     question: '教育政策について、あなたの考えに近いのは？',
     options: [
@@ -30,7 +62,7 @@ export const questions = [
     ]
   },
   {
-    id: 3,
+    id: 6,
     category: '福祉',
     question: '社会保障について、あなたの考えに近いのは？',
     options: [
@@ -40,7 +72,7 @@ export const questions = [
     ]
   },
   {
-    id: 4,
+    id: 7,
     category: 'テクノロジー',
     question: 'デジタル化・DXについて、あなたの考えに近いのは？',
     options: [
