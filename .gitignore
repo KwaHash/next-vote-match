@@ -16,6 +16,9 @@
 # production
 /build
 
+# public assets
+/public/avatars
+
 # misc
 .DS_Store
 *.pem
