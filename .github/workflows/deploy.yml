@@ -38,18 +38,19 @@ jobs:
           cp -r public deploy/
           cp -r app deploy/
           cp -r components deploy/
+          cp -r constants deploy/
           cp -r features deploy/
           cp -r hooks deploy/
           cp -r lib deploy/
-          cp -r providers deploy/
-          cp -r stores deploy/
-          cp -r styles deploy/
+          cp -r types deploy/
           cp package.json deploy/
           cp package-lock.json deploy/
           cp next.config.mjs deploy/
           cp tsconfig.json deploy/
           cp tailwind.config.ts deploy/
           cp postcss.config.mjs deploy/
+          cp index.css deploy/
+          cp components.json deploy/
           tar -czf deploy.tar.gz -C deploy .
 
       - name: Deploy to server
@@ -75,7 +76,7 @@ jobs:
             # Backup current deployment
             if [ -d ".next" ]; then
               echo "Backing up current deployment..."
-              tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz .next public app components features hooks lib providers stores styles package.json package-lock.json next.config.mjs tsconfig.json tailwind.config.ts postcss.config.mjs 2>/dev/null || true
+              tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz .next public app components constants features hooks lib types package.json package-lock.json next.config.mjs tsconfig.json tailwind.config.ts postcss.config.mjs index.css components.json 2>/dev/null || true
             fi
             
             # Extract new deployment
