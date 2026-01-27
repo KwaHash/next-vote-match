@@ -8,12 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { prefectures } from '@/constants/areas'
 import { parties } from '@/constants/parties'
-import { getDistricts } from '@/lib/utils'
+import { selectedDistrictDescription } from '@/lib/utils'
 import { ICandidate } from '@/types/candidate'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FaHeart } from 'react-icons/fa'
+import { FaChevronRight } from 'react-icons/fa6'
 import { HiMiniUserGroup } from 'react-icons/hi2'
 import { PiMapPinAreaFill } from 'react-icons/pi'
 
@@ -26,7 +27,12 @@ const CandidatesPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
-    setFilterDistrict(`${filterPrefecture}1区`)
+    const pref = prefectures.find(p => p.value === filterPrefecture)
+    if (pref && Array.isArray(pref.districts) && pref.districts.length > 0) {
+      setFilterDistrict(pref.districts[0].label)
+    } else {
+      setFilterDistrict(`${filterPrefecture}1区`)
+    }
   }, [filterPrefecture])
 
   useEffect(() => {
@@ -101,11 +107,23 @@ const CandidatesPage = () => {
                 <SelectValue placeholder='選挙区' />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: getDistricts(filterPrefecture) ?? 0 }, (_, idx) => (
-                  <SelectItem key={idx + 1} value={`${filterPrefecture}${idx + 1}区`}>
-                    {`${filterPrefecture}${idx + 1}区`}
-                  </SelectItem>
-                ))}
+                {(() => {
+                  const pref = prefectures.find(p => p.value === filterPrefecture)
+                  if (pref && Array.isArray(pref.districts)) {
+                    return pref.districts.map((district) => (
+                      <SelectItem key={district.label} value={district.label}>
+                        {district.label}
+                      </SelectItem>
+                    ))
+                  }
+                  // Fallback for backward compatibility
+                  const districtCount = Array.isArray(pref?.districts) ? pref.districts.length : (pref?.districts ?? 0)
+                  return Array.from({ length: districtCount }, (_, idx) => (
+                    <SelectItem key={idx + 1} value={`${filterPrefecture}${idx + 1}区`}>
+                      {`${filterPrefecture}${idx + 1}区`}
+                    </SelectItem>
+                  ))
+                })()}
               </SelectContent>
             </Select>
           </div>
@@ -125,6 +143,15 @@ const CandidatesPage = () => {
               </SelectContent>
             </Select>
           </div>
+        </div>
+        <div className='mt-6 p-4 bg-teal-50/50 dark:bg-teal-950/20 rounded-sm border border-teal-200 dark:border-teal-800'>
+          <div className='flex items-center gap-2 mb-3'>
+            <FaChevronRight className='h-4 w-4 text-teal-600 dark:text-teal-400' />
+            <h3 className='text-base font-bold text-foreground'>{filterDistrict}</h3>
+          </div>
+          <p className='text-sm text-gray-700 leading-6'>
+            {selectedDistrictDescription(filterDistrict) ?? ''}
+          </p>
         </div>
       </section>
 

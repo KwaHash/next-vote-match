@@ -6,6 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getDistricts(prefecture: string) {
-  return prefectures.find((p) => p.value === prefecture)?.districts
+export const selectedDistrictDescription = (district: string) => {
+  for (const prefecture of prefectures) {
+    if (Array.isArray(prefecture.districts)) {
+      const districtObj = prefecture.districts.find(d => d.label === district)
+      if (districtObj) {
+        return districtObj.value
+      }
+    }
+  }
+  return undefined
 }
