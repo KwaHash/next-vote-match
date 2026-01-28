@@ -5,29 +5,93 @@ import LoadingIndicator from '@/components/loading-indicator'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { getPrefecturesAndDistrictsByKeyword, IDistrict, IPrefecture, prefectures } from '@/constants/areas'
 import { questions } from '@/constants/match'
+import { parties } from '@/constants/parties'
+import { selectedDistrictDescription } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6'
+import { FaSearch } from 'react-icons/fa'
+import { FaArrowLeft, FaArrowRight, FaChevronRight } from 'react-icons/fa6'
+import { HiMiniUserGroup } from 'react-icons/hi2'
+import { PiMapPinAreaFill } from 'react-icons/pi'
 
 const MatchPage = () => {
+  const [selectPrefectures, setSelectPrefectures] = useState<IPrefecture[]>([])
+  const [filterPrefecture, setFilterPrefecture] = useState<string>('北海道')
+  const [selectDistricts, setSelectDistricts] = useState<IDistrict[]>([])
+  const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
+  const [filterParty, setFilterParty] = useState('全国')
+  const [searchQuery, setSearchQuery] = useState('')
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [showResults, setShowResults] = useState(false)
   const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setSelectPrefectures(prefectures)
+      setSelectDistricts(prefectures[0].districts)
+      setIsLoading(false)
+    }, 100)
   }, [])
 
+  const handlePrefectureChange = (value: string) => {
+    setFilterPrefecture(value)
+    const pref = prefectures.find(p => p.value === value)
+    setFilterDistrict(pref?.districts[0].label || `${value}1区`)
+    setSelectDistricts(pref?.districts || [])
+  }
+
   const progress = ((currentStep + 1) / questions.length) * 100
+
+  const handleSearch = async () => {
+    const trimmed = searchQuery.trim()
+    const isZipcode = /^\d{7}$|^\d{3}-\d{4}$/.test(trimmed.replace(/\s/g, ''))
+    let keyword = ''
+    let somePrefectures = prefectures
+    let someDistricts = prefectures.find(p => p.value === filterPrefecture)?.districts
+    setError(null)
+    setIsLoading(true)
+    if (!trimmed || !isZipcode) {
+      keyword = trimmed.replace(/\s/g, '')
+    } else {
+      await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${encodeURIComponent(trimmed.replace('-', ''))}`)
+      .then((response) => response.json()).then((data) => {
+        if (data.status === 200 && data.results?.[0]) {
+          const { address2 } = data.results[0]
+          keyword = address2
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+    }
+    const prefecturesAndDistricts = getPrefecturesAndDistrictsByKeyword(keyword)
+    if (prefecturesAndDistricts.length > 0) {
+      const { prefecture, districts } = prefecturesAndDistricts[0]
+      somePrefectures = [prefecture]
+      someDistricts = districts
+      setFilterPrefecture(prefecture.value)
+      setFilterDistrict(districts[0].label)
+    } else {
+      if (trimmed)  setError('該当する地域が見つかりませんでした')
+    }
+    setSelectPrefectures(somePrefectures)
+    setSelectDistricts(someDistricts || [])
+    setIsLoading(false)
+  }
 
   const handleAnswer = (value: string) => {
     setAnswers({ ...answers, [currentStep]: value })
@@ -43,10 +107,8 @@ const MatchPage = () => {
       try {
         const { data: { politicians } } = await axios.get('/api/politicians')
         setFilteredPoliticians(politicians.slice(0, 5))
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          const error = err.response?.data?.error
-        }
+      } catch {
+        // Handle error silently
       }
 
       setIsLoading(false)
@@ -121,7 +183,7 @@ const MatchPage = () => {
       <div className='space-y-2'>
         <div className='flex justify-between text-sm text-muted-foreground'>
           <span>
-            質問 {currentStep + 1} / {questions.length}
+            質問 {currentStep + 1} / {questions.length + 1}
           </span>
           <span>{Math.round(progress)}%</span>
         </div>
@@ -129,27 +191,125 @@ const MatchPage = () => {
       </div>
 
       {/* Question Card */}
-      <Card className='shadow-lg rounded-sm'>
-        <CardHeader>
-          <Badge className='w-fit mb-2 hover:bg-primary'>
-            {questions[currentStep].category}
-          </Badge>
-          <CardTitle className='text-2xl'>
-            {questions[currentStep].question}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-4'>
-          <RadioGroup
-            value={answers[currentStep] || ''}
-            onValueChange={handleAnswer}
-            className='flex flex-wrap justify-between'
-          >
-            {questions[currentStep].options
-              .filter(option => currentStep !== 1 || option.value.includes(answers[0]))
-              .map(option => (
-                <div
-                  key={option.value}
-                  className='flex w-full sm:w-[49%] items-start space-x-2 p-4 rounded-none border hover:bg-muted/50 cursor-pointer transition-colors'
+      { currentStep === 0 ? (
+        <Card className='shadow-lg rounded-sm'>
+          <CardHeader>
+            <Badge className='w-fit mb-2 hover:bg-primary'>選挙区と政党支持</Badge>
+            <CardTitle className='text-xl'>選挙区と支持政党を教えてください</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <div className='w-full '>
+            <div className='w-full bg-background/50 backdrop-blur-sm mb-4'>
+              <form onSubmit={(e) => { e.preventDefault(); handleSearch() }} className='flex flex-col sm:flex-row gap-2 md:gap-3'>
+                <div className='flex-1 relative flex'>
+                  <div className='relative flex-1'>
+                    <FaSearch className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground' />
+                    <Input
+                      placeholder='地名や郵便番号で検索...'
+                      className='pl-10 rounded-none'
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  variant='default'
+                  size='sm'
+                  className='rounded-none px-4 flex-shrink-0 h-10 bg-secondary hover:bg-secondary/80 transition-all duration-500'
+                  type='submit'
+                >
+                  <FaSearch className='h-4 w-4 mr-1' />
+                  <span>検索</span>
+                </Button>
+              </form>
+            </div>
+            {error ? (
+              <p className='w-full mb-4 bg-red-50 border-l-4 border-red-400 p-4 text-sm text-red-700'>{error}</p>
+            ) : (
+              <div className='w-full bg-background/50 backdrop-blur-sm'>
+                <div className='flex flex-col sm:flex-row flex-wrap gap-4 justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <Label className='font-normal w-12'>地域</Label>
+                    <Select value={filterPrefecture} onValueChange={handlePrefectureChange}>
+                      <SelectTrigger className='flex-1 sm:w-[230px] rounded-none flex items-center'>
+                        <PiMapPinAreaFill className='h-5 w-5 mr-3 text-muted-foreground' />
+                        <SelectValue placeholder='地域' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectPrefectures.map((prefecture) => (
+                          <SelectItem key={prefecture.id} value={prefecture.value}>
+                            {prefecture.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <Label className='font-normal w-12'>選挙区</Label>
+                    <Select value={filterDistrict} onValueChange={setFilterDistrict}>
+                      <SelectTrigger className='flex-1 sm:w-[230px] rounded-none flex items-center'>
+                        <PiMapPinAreaFill className='h-5 w-5 mr-3 text-muted-foreground' />
+                        <SelectValue placeholder='選挙区' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectDistricts.map((district) => (
+                          <SelectItem key={district.label} value={district.label}>
+                            {district.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <Label className='font-normal w-12'>政党</Label>
+                    <Select value={filterParty} onValueChange={setFilterParty}>
+                      <SelectTrigger className='flex-1 sm:w-[230px] rounded-none flex items-center'>
+                        <HiMiniUserGroup className='h-5 w-5 mr-3 text-muted-foreground' />
+                        <SelectValue placeholder='政党' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {parties.map((party) => (
+                          <SelectItem key={party.id} value={party.value}>
+                            {party.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className='mt-6 w-full mb-4 bg-green-50 border-l-4 border-green-400 p-4 text-sm text-green-700'>
+                  <div className='flex items-center gap-2 mb-3'>
+                    <FaChevronRight className='h-4 w-4 text-green-600 dark:text-green-400' />
+                    <h3 className='text-base font-bold text-foreground'>{filterDistrict}</h3>
+                  </div>
+                  <p className='text-sm text-gray-700 leading-6'>
+                    {selectedDistrictDescription(filterDistrict) ?? ''}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className='shadow-lg rounded-sm'>
+          <CardHeader>
+            <Badge className='w-fit mb-2 hover:bg-primary'>
+              {questions[currentStep].category}
+            </Badge>
+            <CardTitle className='text-xl'>
+              {questions[currentStep].question}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-4'>
+            <RadioGroup
+              value={answers[currentStep] || ''}
+              onValueChange={handleAnswer}
+              className='flex flex-wrap justify-between'
+            >
+              {questions[currentStep].options.map(option => (
+                <div key={option.value}
+                  className='flex w-full sm:w-[49.5%] items-start space-x-2 px-3 py-4 rounded-none border hover:bg-muted/50 cursor-pointer transition-colors'
                   onClick={() => handleAnswer(option.value)}
                 >
                   <RadioGroupItem value={option.value} id={option.value} className='w-4 h-4 mt-1' />
@@ -160,10 +320,11 @@ const MatchPage = () => {
                     {option.label}
                   </Label>
                 </div>
-            ))}
-          </RadioGroup>
-        </CardContent>
-      </Card>
+              ))}
+            </RadioGroup>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Navigation */}
       <div className='flex justify-between'>
@@ -178,7 +339,7 @@ const MatchPage = () => {
         <Button
           className='shadow-lg rounded-none'
           onClick={handleNext}
-          disabled={!answers[currentStep]}
+          disabled={currentStep > 0 && !answers[currentStep]}
         >
           {currentStep === questions.length - 1 ? '結果を見る' : '次へ'}
           <FaArrowRight className='h-4 w-4 ml-1' />

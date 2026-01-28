@@ -28,11 +28,7 @@ const CandidatesPage = () => {
   
   useEffect(() => {
     const pref = prefectures.find(p => p.value === filterPrefecture)
-    if (pref && Array.isArray(pref.districts) && pref.districts.length > 0) {
-      setFilterDistrict(pref.districts[0].label)
-    } else {
-      setFilterDistrict(`${filterPrefecture}1区`)
-    }
+    setFilterDistrict(pref?.districts[0].label || `${filterPrefecture}1区`)
   }, [filterPrefecture])
 
   useEffect(() => {
@@ -144,7 +140,7 @@ const CandidatesPage = () => {
             </Select>
           </div>
         </div>
-        <div className='mt-6 p-4 bg-teal-50/50 dark:bg-teal-950/20 rounded-sm border border-teal-200 dark:border-teal-800'>
+        <div className='mt-6 w-full mb-4 bg-green-50 border-l-4 border-green-400 p-4 text-sm text-green-700'>
           <div className='flex items-center gap-2 mb-3'>
             <FaChevronRight className='h-4 w-4 text-teal-600 dark:text-teal-400' />
             <h3 className='text-base font-bold text-foreground'>{filterDistrict}</h3>
