@@ -383,3 +383,36 @@ export const prefectures = [
     { label: '沖縄4区', value: '石垣市、糸満市、豊見城市、宮古島市、南城市、与那原町、南風原町、八重瀬町、多良間村、竹富町、与那国町' }
   ] }
 ]
+
+export type IPrefecture = (typeof prefectures)[number]
+export type IDistrict = IPrefecture['districts'][number]
+
+export interface PrefectureWithDistricts {
+  prefecture: IPrefecture
+  districts: IDistrict[]
+}
+
+export function getPrefecturesAndDistrictsByKeyword(keyword: string): PrefectureWithDistricts[] {
+  const trimmed = keyword?.trim()
+  if (!trimmed) return []
+
+  return prefectures
+    .map((prefecture) => {
+      const prefMatches =
+        prefecture.label.includes(trimmed) || prefecture.value.includes(trimmed)
+      const matchingDistricts = prefecture.districts.filter(
+        (d) =>
+          prefMatches ||
+          d.label.includes(trimmed) ||
+          d.value.includes(trimmed)
+      )
+      if (matchingDistricts.length > 0 || prefMatches) {
+        return {
+          prefecture,
+          districts: prefMatches ? prefecture.districts : matchingDistricts,
+        }
+      }
+      return null
+    })
+    .filter((x): x is PrefectureWithDistricts => x !== null)
+}
