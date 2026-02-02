@@ -63,4 +63,24 @@ async function initializeDatabase(db: Connection) {
       FOREIGN KEY (politician_id) REFERENCES politicians(id) ON DELETE CASCADE
     )
   `)
+
+  // representatives2026 candidates
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS representatives2026 (
+      kanji_name VARCHAR(255),
+      hiragana_name VARCHAR(255),
+      party VARCHAR(255),
+      district VARCHAR(255),
+      proportional VARCHAR(255),
+      shu_count INT,
+      san_count INT,
+      birth_date VARCHAR(255),
+      avatar VARCHAR(255),
+      title VARCHAR(255),
+      biography TEXT,
+      origin VARCHAR(255),
+      shin VARCHAR(255),
+      questions_answers JSON
+    )
+  `)
 }

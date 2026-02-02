@@ -1,17 +1,18 @@
 export interface IPolitician {
   id: number
-  name: string
+  kanji_name: string
+  hiragana_name?: string
   party?: string
+  district?: string
+  proportional?: string
+  shu_count?: number
+  san_count?: number
+  birth_date?: string
   avatar?: string
-  birth_year?: number
-  gender?: string
-  website?: string
-  facebook?: string
-  twitter?: string
-  youtube?: string
-  line?: string
-  instagram?: string
-  tiktok?: string
-  linkedin?: string
-  created_at?: string
+  title?: string
+  biography?: string
+  origin?: string
+  shin?: string
+  questions_answers?: JSON
+  created_at?: Date | string
 }
