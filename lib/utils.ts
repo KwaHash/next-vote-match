@@ -1,4 +1,5 @@
 import { prefectures } from '@/constants/areas'
+import { IPolitician } from '@/types/politician'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -35,4 +36,15 @@ export function getAgeFromBirthDate(birthDate: string | undefined): string {
     age -= 1
   }
   return age >= 0 ? `満${age}歳` : '—'
+}
+
+export function getWebsiteLinks(website: IPolitician['website']) {
+  if (!website) return []
+  if (Array.isArray(website)) return website
+  try {
+    const parsed = JSON.parse(website)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
