@@ -7,32 +7,8 @@ export async function GET(request: NextRequest) {
     const district = searchParams.get('district')
 
     const politicians = await withDatabase(async (db) => {
-      let query = `
-        SELECT r.*, 
-          p.name, 
-          p.party, 
-          p.avatar, 
-          p.birth_year, 
-          p.gender, 
-          p.website, 
-          p.facebook, 
-          p.twitter, 
-          p.youtube, 
-          p.line, 
-          p.instagram, 
-          p.tiktok, 
-          p.linkedin
-        FROM politicians p
-        INNER JOIN represent51 r ON p.id = r.politician_id
-      `
-      const params: string[] = []
-      
-      if (district) {
-        query += ' WHERE r.district = ?'
-        params.push(district)
-      }
-      
-      const [rows] = await db.query(query, params)
+      const query = 'SELECT * FROM representatives2026 where district = ?'
+      const [rows] = await db.query(query, [district])
       return rows
     })
 

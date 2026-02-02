@@ -1,11 +1,12 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import { ICandidate } from '@/types/candidate'
+import { getAgeFromBirthDate } from '@/lib/utils'
+import { IPolitician } from '@/types/politician'
 import Image from 'next/image'
-import Link from 'next/link'
-import { FaHome, FaLine, FaTiktok } from 'react-icons/fa'
-import { FaFacebook, FaLinkedin, FaSquareInstagram, FaXTwitter, FaYoutube } from 'react-icons/fa6'
+// import Link from 'next/link'
+// import { FaHome, FaLine, FaTiktok } from 'react-icons/fa'
+// import { FaFacebook, FaLinkedin, FaSquareInstagram, FaXTwitter, FaYoutube } from 'react-icons/fa6'
 
-export const CandidateCard = (politician: ICandidate) => {
+export const CandidateCard = (politician: IPolitician) => {
   return (
     <TableRow
       className='hover:bg-gray-100 transition-all duration-300'
@@ -15,32 +16,34 @@ export const CandidateCard = (politician: ICandidate) => {
         <div className='w-full h-40 relative overflow-hidden'>
           <Image
             src={politician.avatar || ''}
-            alt={politician.name}
+            alt={politician.kanji_name}
             fill
             className='object-cover'
           />
         </div>
       </TableCell>
-      <TableCell className='border border-gray-300 text-center text-lg font-bold'>
-        {politician.name}
+      <TableCell className='border border-gray-300 text-center leading-8'>
+        <p className='text-lg font-bold'>{politician.kanji_name}</p>
+        <p className='text-sm'>{politician.hiragana_name}</p>
+        <span className='text-sm font-normal'>({getAgeFromBirthDate(politician.birth_date)})</span>
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
         {politician.party || '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        {politician.birth_year ? `${2025 - politician.birth_year}` : '—'}
+        —
+      </TableCell>
+      <TableCell className='border border-gray-300 text-center p-0.5'>
+        {politician.shin || '—'}
+      </TableCell>
+      <TableCell className='border border-gray-300 text-center p-0.5'>
+        {politician.shu_count}
+      </TableCell>
+      <TableCell className='border border-gray-300 text-center p-0.5'>
+        {politician.proportional ? '重複' : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        {politician.gender || '—'}
-      </TableCell>
-      <TableCell className='border border-gray-300 text-center'>
-        {politician.new_comer || '—'}
-      </TableCell>
-      <TableCell className='border border-gray-300 text-center'>
-        {politician.tickets || '—票'}
-      </TableCell>
-      <TableCell className='border border-gray-300 text-center'>
-        <div className='flex flex-wrap items-center gap-2'>
+        {/* <div className='flex flex-wrap items-center gap-2'>
           {politician.website && (
             <Link
               href={politician.website}
@@ -129,7 +132,7 @@ export const CandidateCard = (politician: ICandidate) => {
               <FaLinkedin className='h-7 w-7 text-[#0A66C2]' />
             </Link>
           )}
-        </div>
+        </div> */}
       </TableCell>
     </TableRow>
   )

@@ -9,13 +9,7 @@ import {
   PaginationLink, PaginationNext, PaginationPrevious
 } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { parties } from '@/constants/parties'
 import { cn } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
@@ -57,18 +51,17 @@ const PoliticiansPage = () => {
     let searchedPoliticians = allPoliticians
     if (searchQuery) {
       searchedPoliticians = searchedPoliticians.filter((politician) => {
-        if (politician.name.includes(searchQuery)) return true
+        if (politician.kanji_name.includes(searchQuery)) return true
+        if (politician.hiragana_name?.includes(searchQuery)) return true
         if (politician.party?.includes(searchQuery)) return true
-        if (politician.birth_year?.toString().includes(searchQuery)) return true
-        if (politician.gender?.includes(searchQuery)) return true
-        if (politician.website?.includes(searchQuery)) return true
-        if (politician.facebook?.includes(searchQuery)) return true
-        if (politician.twitter?.includes(searchQuery)) return true
-        if (politician.youtube?.includes(searchQuery)) return true
-        if (politician.line?.includes(searchQuery)) return true
-        if (politician.instagram?.includes(searchQuery)) return true
-        if (politician.tiktok?.includes(searchQuery)) return true
-        if (politician.linkedin?.includes(searchQuery)) return true
+        if (politician.district?.includes(searchQuery)) return true
+        if (politician.shin?.includes(searchQuery)) return true
+        if (politician.shu_count?.toString().includes(searchQuery)) return true
+        if (politician.san_count?.toString().includes(searchQuery)) return true
+        if (politician.title?.includes(searchQuery)) return true
+        if (politician.biography?.includes(searchQuery)) return true
+        if (politician.origin?.includes(searchQuery)) return true
+        if (politician.proportional?.includes(searchQuery)) return true
         return false
       })
     }
@@ -218,8 +211,10 @@ const PoliticiansPage = () => {
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[200px] p-1'>名前</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>年齢</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>性別</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>生年月日</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[80px] p-0.5'>当選数</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>比例</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
               </TableRow>
             </TableHeader>

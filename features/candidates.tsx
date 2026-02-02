@@ -9,7 +9,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components
 import { prefectures } from '@/constants/areas'
 import { parties } from '@/constants/parties'
 import { selectedDistrictDescription } from '@/lib/utils'
-import { ICandidate } from '@/types/candidate'
+import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -22,8 +22,8 @@ const CandidatesPage = () => {
   const [filterPrefecture, setFilterPrefecture] = useState<string>('北海道')
   const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
   const [filterParty, setFilterParty] = useState('全国')
-  const [allPoliticians, setAllPoliticians] = useState<ICandidate[]>([])
-  const [filteredPoliticians, setFilteredPoliticians] = useState<ICandidate[]>([])
+  const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
+  const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
@@ -165,12 +165,12 @@ const CandidatesPage = () => {
               <TableRow className='bg-gray-600 hover:bg-gray-600'>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>結果</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[180px] p-1'>名前</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[200px] p-1'>候補者</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>年齢</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>性別</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>現職/新人</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[80px] p-1'>獲得票</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-0.5'>獲得票</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>当選数</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>比例</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
               </TableRow>
             </TableHeader>
