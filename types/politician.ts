@@ -14,5 +14,6 @@ export interface IPolitician {
   origin?: string
   shin?: string
   questions_answers?: JSON
+  website?: string
   created_at?: Date | string
 }
