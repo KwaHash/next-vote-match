@@ -13,7 +13,7 @@ export interface IPolitician {
   biography?: string
   origin?: string
   shin?: string
-  questions_answers?: JSON
+  questions_answers?: string
   website?: string
   created_at?: Date | string
 }

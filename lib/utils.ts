@@ -48,3 +48,14 @@ export function getWebsiteLinks(website: IPolitician['website']) {
     return []
   }
 }
+
+export function getQuestionAnswers(answers: IPolitician['questions_answers']) {
+  if (!answers) return []
+  if (Array.isArray(answers)) return answers
+  try {
+    const parsed = JSON.parse(answers)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
