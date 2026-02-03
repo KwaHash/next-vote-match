@@ -13,19 +13,25 @@ export const CandidateCard = (politician: IPolitician) => {
     >
       <TableCell className='border border-gray-300 text-center'></TableCell>
       <TableCell className='border border-gray-300 text-center p-1.5'>
-        <div className='w-full h-40 relative overflow-hidden'>
-          <Image
-            src={politician.avatar || ''}
-            alt={politician.kanji_name}
-            fill
-            className='object-cover'
-          />
-        </div>
+        <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
+          <div className='w-full h-40 relative overflow-hidden'>
+            <Image
+              src={politician.avatar || ''}
+              alt={politician.kanji_name}
+              fill
+              className='object-cover'
+            />
+          </div>
+        </Link>
       </TableCell>
-      <TableCell className='border border-gray-300 text-center leading-8'>
-        <p className='text-lg font-bold'>{politician.kanji_name}</p>
-        <p className='text-sm'>{politician.hiragana_name}</p>
-        <span className='text-sm font-normal'>({getAgeFromBirthDate(politician.birth_date)})</span>
+      <TableCell className='border border-gray-300 text-center leading-8 p-0 relative'>
+        <Link href={`/politicians/${politician.id}`}
+          className='absolute inset-0 flex flex-col items-center justify-center px-2 hover:opacity-90 transition-opacity duration-300'
+        >
+          <p className='text-lg font-bold'>{politician.kanji_name}</p>
+          <p className='text-sm mb-2'>{politician.hiragana_name}</p>
+          <span className='text-sm font-normal'>({getAgeFromBirthDate(politician.birth_date)})</span>
+        </Link>
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
         {politician.party || '—'}

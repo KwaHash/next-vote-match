@@ -12,6 +12,7 @@ export const PoliticianCard = (politician: IPolitician) => {
       className='hover:bg-gray-100 transition-all duration-300'
     >
       <TableCell className='border border-gray-300 text-center p-1.5'>
+      <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
         <div className='w-full h-40 relative overflow-hidden'>
           <Image
             src={politician.avatar || ''}
@@ -20,10 +21,15 @@ export const PoliticianCard = (politician: IPolitician) => {
             className='object-cover'
           />
         </div>
+      </Link>
       </TableCell>
-      <TableCell className='border border-gray-300 text-center'>
-        <p className='text-lg font-bold'>{politician.kanji_name}</p>
-        <span className='text-sm'>{politician.hiragana_name}</span>
+      <TableCell className='border border-gray-300 text-center leading-8 p-0 relative'>
+      <Link href={`/politicians/${politician.id}`}
+          className='absolute inset-0 flex flex-col items-center justify-center px-2 hover:opacity-90 transition-opacity duration-300'
+        >
+          <p className='text-lg font-bold'>{politician.kanji_name}</p>
+          <span className='text-sm'>{politician.hiragana_name}</span>
+      </Link>
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
         {politician.party || '—'}
