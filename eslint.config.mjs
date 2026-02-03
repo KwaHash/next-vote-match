@@ -94,6 +94,7 @@ const eslintConfig = defineConfig([
     "**/*.json",
     "node_modules/**",
     "public/**",
+    "**/app/api/**",
     "styles/**",
     ".next/**",
     "out/**",
