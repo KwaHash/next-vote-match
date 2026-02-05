@@ -5,7 +5,7 @@ import { IPolitician } from '@/types/politician'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const CandidateCard = (politician: IPolitician) => {
+export const DistrictCandidateCard = (politician: IPolitician) => {
   const links = getWebsiteLinks(politician.website)
   return (
     <TableRow

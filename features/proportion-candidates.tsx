@@ -132,7 +132,7 @@ const ProportionCandidatesPage = () => {
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>結果</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>名簿順位</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[200px] p-1'>候補者</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>候補者</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-0.5'>獲得票</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>

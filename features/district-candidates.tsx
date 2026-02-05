@@ -1,6 +1,6 @@
 'use client'
 
-import { CandidateCard } from '@/components/card/candidate-card'
+import { DistrictCandidateCard } from '@/components/card/district-candidate-card'
 import LoadingIndicator from '@/components/loading-indicator'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -176,7 +176,7 @@ const DistrictCandidatesPage = () => {
             </TableHeader>
             <TableBody>
               {filteredPoliticians.map((politician) => (
-                <CandidateCard key={politician.id} {...politician} />
+                <DistrictCandidateCard key={politician.id} {...politician} />
               ))}
             </TableBody>
           </Table>

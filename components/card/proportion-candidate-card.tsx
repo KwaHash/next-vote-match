@@ -47,7 +47,7 @@ export const ProportionCandidateCard = (politician: IPolitician) => {
         {politician.shu_count}
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
-        {politician.proportional ? politician.proportional : '—'}
+        {politician.district ? politician.district : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
       <div className='flex flex-wrap items-center gap-2'>
