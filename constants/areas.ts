@@ -384,6 +384,20 @@ export const prefectures = [
   ] }
 ]
 
+export const blocks = [
+  { id: 1, value: '北海道', label: '北海道', counts: 8 },
+  { id: 2, value: '東北', label: '東北', counts: 12 },
+  { id: 3, value: '北関東', label: '北関東', counts: 19 },
+  { id: 4, value: '東京', label: '東京', counts: 19 },
+  { id: 5, value: '南関東', label: '南関東', counts: 23 },
+  { id: 6, value: '北陸信越', label: '北陸信越', counts: 10 },
+  { id: 7, value: '東海', label: '東海', counts: 21 },
+  { id: 8, value: '近畿', label: '近畿', counts: 28 },
+  { id: 9, value: '中国', label: '中国', counts: 10 },
+  { id: 10, value: '四国', label: '四国', counts: 6 },
+  { id: 11, value: '九州', label: '九州', counts: 20 },
+]
+
 export type IPrefecture = (typeof prefectures)[number]
 export type IDistrict = IPrefecture['districts'][number]
 

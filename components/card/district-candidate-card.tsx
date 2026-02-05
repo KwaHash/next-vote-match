@@ -5,51 +5,51 @@ import { IPolitician } from '@/types/politician'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const PoliticianCard = (politician: IPolitician) => {
+export const DistrictCandidateCard = (politician: IPolitician) => {
   const links = getWebsiteLinks(politician.website)
   return (
     <TableRow
       className='hover:bg-gray-100 transition-all duration-300'
     >
+      <TableCell className='border border-gray-300 text-center'></TableCell>
       <TableCell className='border border-gray-300 text-center p-1.5'>
-      <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
-        <div className='w-full h-40 relative overflow-hidden'>
-          <Image
-            src={politician.avatar || ''}
-            alt={politician.kanji_name}
-            fill
-            className='object-cover'
-          />
-        </div>
-      </Link>
+        <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
+          <div className='w-full h-40 relative overflow-hidden'>
+            <Image
+              src={politician.avatar || ''}
+              alt={politician.kanji_name}
+              fill
+              className='object-cover'
+            />
+          </div>
+        </Link>
       </TableCell>
       <TableCell className='border border-gray-300 text-center leading-8 p-0 relative'>
-      <Link href={`/politicians/${politician.id}`}
+        <Link href={`/politicians/${politician.id}`}
           className='absolute inset-0 flex flex-col items-center justify-center px-2 hover:opacity-90 transition-opacity duration-300'
         >
           <p className='text-lg font-bold'>{politician.kanji_name}</p>
-          <span className='text-sm'>{politician.hiragana_name}</span>
-      </Link>
+          <p className='text-sm mb-2'>{politician.hiragana_name}</p>
+          <span className='text-sm font-normal'>({getAgeFromBirthDate(politician.birth_date)})</span>
+        </Link>
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
         {politician.party || '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        <p className='leading-8'>{politician.birth_date}</p>
-        <span>({getAgeFromBirthDate(politician.birth_date)})</span>
+        —
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
         {politician.shin || '—'}
       </TableCell>
-      <TableCell className='border border-gray-300 text-center p-0.5 leading-6'>
-        <p>衆： {politician.shu_count}回</p>
-        <p>参： {politician.san_count}回</p>
+      <TableCell className='border border-gray-300 text-center p-0.5'>
+        {politician.shu_count}
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
         {politician.proportional ? politician.proportional : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        <div className='flex flex-wrap items-center gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
           {links.map((item) => {
             const label = item.label?.toLowerCase() ?? ''
             const icon = WEBSITE_ICONS[label]

@@ -5,13 +5,14 @@ import { IPolitician } from '@/types/politician'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const CandidateCard = (politician: IPolitician) => {
+export const ProportionCandidateCard = (politician: IPolitician) => {
   const links = getWebsiteLinks(politician.website)
   return (
     <TableRow
       className='hover:bg-gray-100 transition-all duration-300'
     >
-      <TableCell className='border border-gray-300 text-center'></TableCell>
+      <TableCell className='border border-gray-300 text-center p-0.5'></TableCell>
+      <TableCell className='border border-gray-300 text-center p-0.5'>{politician.rank}</TableCell>
       <TableCell className='border border-gray-300 text-center p-1.5'>
         <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
           <div className='w-full h-40 relative overflow-hidden'>
@@ -46,7 +47,7 @@ export const CandidateCard = (politician: IPolitician) => {
         {politician.shu_count}
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
-        {politician.proportional ? '重複' : '—'}
+        {politician.district ? politician.district : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
       <div className='flex flex-wrap items-center gap-2'>
