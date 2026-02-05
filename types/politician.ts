@@ -5,6 +5,7 @@ export interface IPolitician {
   party?: string
   district?: string
   proportional?: string
+  rank?: number
   shu_count?: number
   san_count?: number
   birth_date?: string

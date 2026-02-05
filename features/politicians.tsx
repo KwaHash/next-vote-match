@@ -214,7 +214,7 @@ const PoliticiansPage = () => {
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>生年月日</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[80px] p-0.5'>当選数</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-1'>比例</TableHead>
+                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[70px] p-1'>比例</TableHead>
                 <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
               </TableRow>
             </TableHeader>

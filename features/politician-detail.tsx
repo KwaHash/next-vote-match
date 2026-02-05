@@ -105,7 +105,7 @@ const PoliticianDetailPage = ({ id }: { id: string }) => {
                     <span className='min-w-28'>出馬選挙区</span>
                     <p>
                       {politician?.district || '—'}
-                      {politician?.proportional && '（比例重複）'}
+                      {politician?.proportional && `（比例：${politician.proportional}）`}
                     </p>
                   </div>
                   <div className='flex items-center'>

@@ -46,7 +46,7 @@ export const PoliticianCard = (politician: IPolitician) => {
         <p>参： {politician.san_count}回</p>
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
-        {politician.proportional ? '重複' : '—'}
+        {politician.proportional ? politician.proportional : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
         <div className='flex flex-wrap items-center gap-2'>
