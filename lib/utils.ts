@@ -1,4 +1,4 @@
-import { prefectures } from '@/constants/areas'
+import { blocks, prefectures } from '@/constants/areas'
 import { IPolitician } from '@/types/politician'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -17,6 +17,14 @@ export const selectedDistrictDescription = (district: string) => {
     }
   }
   return undefined
+}
+
+export const selectedProportionalDescription = (proportional: string) => {
+  for (const block of blocks) {
+    if (block.value === proportional) {
+      return `定員${block.counts}人`
+    }
+  }
 }
 
 export function getAgeFromBirthDate(birthDate: string | undefined): string {

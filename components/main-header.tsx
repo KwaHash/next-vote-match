@@ -13,7 +13,8 @@ const MainHeader = () => {
     { label: 'わたしの政治とは', icon: HiOutlineInformationCircle, href: '/about' },
     { label: 'マッチング', icon: BsStars, href: '/match' },
     { label: '政治家一覧', icon: FaListUl, href: '/politicians' },
-    { label: '衆議院選挙', icon: FaListCheck, href: '/candidates' },
+    { label: '小選挙区', icon: FaListCheck, href: '/candidates/district' },
+    { label: '比例代表', icon: FaListCheck, href: '/candidates/proportion' },
   ]
 
   return (
