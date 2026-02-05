@@ -18,7 +18,7 @@ import { FaChevronRight } from 'react-icons/fa6'
 import { HiMiniUserGroup } from 'react-icons/hi2'
 import { PiMapPinAreaFill } from 'react-icons/pi'
 
-const CandidatesPage = () => {
+const DistrictCandidatesPage = () => {
   const [filterPrefecture, setFilterPrefecture] = useState<string>('北海道')
   const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
   const [filterParty, setFilterParty] = useState('全国')
@@ -35,7 +35,7 @@ const CandidatesPage = () => {
     const fetchPoliticians = async () => {
       setIsLoading(true)
       try {
-        const { data: { politicians } } = await axios.get('/api/candidates', {
+        const { data: { politicians } } = await axios.get('/api/candidates/district', {
           params: { district: filterDistrict }
         })
         setAllPoliticians(politicians)
@@ -70,7 +70,7 @@ const CandidatesPage = () => {
       <section className='py-20 bg-gradient-to-br from-primary/10 to-accent/10'>
         <div className='container'>
           <div className='max-w-3xl mx-auto text-center space-y-4'>
-            <h1 className='text-4xl md:text-5xl font-bold'>第51回衆議院議員選挙</h1>
+            <h1 className='text-4xl md:text-5xl font-bold'>第51回衆議院議員選挙(小選挙区)</h1>
             <p className='text-xl text-muted-foreground'>公示日: 	2026年01月27日、 投票日: 2026年02月08日</p>
           </div>
         </div>
@@ -204,4 +204,4 @@ const CandidatesPage = () => {
   )
 }
 
-export default CandidatesPage
+export default DistrictCandidatesPage
