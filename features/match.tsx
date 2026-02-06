@@ -29,7 +29,7 @@ const MatchPage = () => {
   const [filterPrefecture, setFilterPrefecture] = useState<string>('北海道')
   const [selectDistricts, setSelectDistricts] = useState<IDistrict[]>([])
   const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
-  const [filterParty, setFilterParty] = useState('全国')
+  const [filterParty, setFilterParty] = useState('全て政党')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})

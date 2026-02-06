@@ -1,5 +1,5 @@
 export const parties = [
-  { id: 0, value: '全国', label: '全国' },
+  { id: 0, value: '全て政党', label: '全て政党' },
   { id: 1, value: '中道改革', label: '中道改革' },
   { id: 2, value: '国民民主党', label: '国民民主党' },
   { id: 3, value: '共産党', label: '共産党' },
