@@ -23,12 +23,13 @@ const DistrictCandidatesPage = () => {
   const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
   const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
-  const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
-    const pref = prefectures.find(p => p.value === filterPrefecture)
-    setFilterDistrict(pref?.districts[0].label || `${filterPrefecture}1区`)
+    setTimeout(() => {
+      const pref = prefectures.find(p => p.value === filterPrefecture)
+      setFilterDistrict(pref?.districts[0].label || `${filterPrefecture}1区`)
+    }, 100)
   }, [filterPrefecture])
 
   useEffect(() => {
@@ -36,10 +37,9 @@ const DistrictCandidatesPage = () => {
       setIsLoading(true)
       try {
         const { data: { politicians } } = await axios.get('/api/candidates/district', {
-          params: { district: filterDistrict }
+          params: { district: filterDistrict, party: filterParty }
         })
         setAllPoliticians(politicians)
-        setFilteredPoliticians(politicians)
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const error = err.response?.data?.error
@@ -48,17 +48,7 @@ const DistrictCandidatesPage = () => {
       setIsLoading(false)
     }
     fetchPoliticians()
-  }, [filterDistrict])
-
-  useEffect(() => {
-    if (filterParty !== '全て政党') {
-      const filteredPoliticians = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
-      setFilteredPoliticians(filteredPoliticians)
-    } else {
-      setFilteredPoliticians(allPoliticians)
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterParty])
+  }, [filterDistrict, filterParty])
 
   if (isLoading) {
     return <LoadingIndicator />
@@ -155,7 +145,7 @@ const DistrictCandidatesPage = () => {
       <section className='w-full max-w-6xl mx-auto px-4 md:px-8 py-12'>
         <div className='flex justify-between items-center mb-6'>
           <div className='text-sm'>
-            現在、立候補されている候補者は{filteredPoliticians.length}名いらっしゃいます。
+            現在、立候補されている候補者は{allPoliticians.length}名いらっしゃいます。
           </div>
         </div>
 
@@ -175,7 +165,7 @@ const DistrictCandidatesPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredPoliticians.map((politician) => (
+              {allPoliticians.map((politician) => (
                 <DistrictCandidateCard key={politician.id} {...politician} />
               ))}
             </TableBody>

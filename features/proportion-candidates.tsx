@@ -22,7 +22,6 @@ const ProportionCandidatesPage = () => {
   const [filterProportional, setFilterProportional] = useState<string>('北海道')
   const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
-  const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -30,10 +29,9 @@ const ProportionCandidatesPage = () => {
       setIsLoading(true)
       try {
         const { data: { politicians } } = await axios.get('/api/candidates/proportion', {
-          params: { proportional: filterProportional }
+          params: { proportional: filterProportional, party: filterParty }
         })
         setAllPoliticians(politicians)
-        setFilteredPoliticians(politicians)
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const _error = err.response?.data?.error
@@ -42,23 +40,13 @@ const ProportionCandidatesPage = () => {
       setIsLoading(false)
     }
     fetchPoliticians()
-  }, [filterProportional])
-
-  useEffect(() => {
-    if (filterParty !== '全て政党') {
-      const filtered = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
-      setFilteredPoliticians(filtered)
-    } else {
-      setFilteredPoliticians(allPoliticians)
-    }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterParty])
+  }, [filterProportional, filterParty])
 
   const partyOrder = parties.filter((p) => p.value !== '全て政党').map((p) => p.value)
   const byParty = filterParty === '全て政党'
     ? (() => {
         const map = new Map<string, IPolitician[]>()
-        for (const p of filteredPoliticians) {
+        for (const p of allPoliticians) {
           const key = p.party || '—'
           if (!map.has(key)) map.set(key, [])
           map.get(key)!.push(p)
@@ -142,7 +130,7 @@ const ProportionCandidatesPage = () => {
       <section className='w-full max-w-6xl mx-auto px-4 md:px-8 py-12'>
         <div className='flex justify-between items-center mb-6'>
           <div className='text-sm'>
-            現在、立候補されている候補者は{filteredPoliticians.length}名いらっしゃいます。
+            現在、立候補されている候補者は{allPoliticians.length}名いらっしゃいます。
           </div>
         </div>
 
@@ -198,7 +186,7 @@ const ProportionCandidatesPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredPoliticians.map((politician) => (
+                {allPoliticians.map((politician) => (
                   <ProportionCandidateCard key={politician.id} {...politician} />
                 ))}
               </TableBody>

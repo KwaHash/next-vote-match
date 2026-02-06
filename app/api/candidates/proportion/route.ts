@@ -5,10 +5,15 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const proportional = searchParams.get('proportional')
+    const party = searchParams.get('party')
+    const filterByParty = party && party !== '全て政党'
 
     const politicians = await withDatabase(async (db) => {
-      const query = 'SELECT * FROM representatives2026 WHERE proportional = ? ORDER BY `rank` ASC'
-      const [rows] = await db.query(query, [proportional])
+      const query = filterByParty
+        ? 'SELECT * FROM representatives2026 WHERE proportional = ? AND party = ? ORDER BY `rank` ASC'
+        : 'SELECT * FROM representatives2026 WHERE proportional = ? ORDER BY `rank` ASC'
+      const params = filterByParty ? [proportional, party] : [proportional]
+      const [rows] = await db.query(query, params)
       return rows
     })
 
