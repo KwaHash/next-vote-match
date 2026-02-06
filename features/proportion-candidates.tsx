@@ -12,7 +12,7 @@ import { selectedProportionalDescription } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { FaHeart } from 'react-icons/fa'
 import { FaChevronRight } from 'react-icons/fa6'
 import { HiMiniUserGroup } from 'react-icons/hi2'
@@ -36,7 +36,7 @@ const ProportionCandidatesPage = () => {
         setFilteredPoliticians(politicians)
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const error = err.response?.data?.error
+          const _error = err.response?.data?.error
         }
       }
       setIsLoading(false)
@@ -46,13 +46,34 @@ const ProportionCandidatesPage = () => {
 
   useEffect(() => {
     if (filterParty !== '全国') {
-      const filteredPoliticians = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
-      setFilteredPoliticians(filteredPoliticians)
+      const filtered = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
+      setFilteredPoliticians(filtered)
     } else {
       setFilteredPoliticians(allPoliticians)
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterParty])
+
+  const partyOrder = parties.filter((p) => p.value !== '全国').map((p) => p.value)
+  const byParty = filterParty === '全国'
+    ? (() => {
+        const map = new Map<string, IPolitician[]>()
+        for (const p of filteredPoliticians) {
+          const key = p.party || '—'
+          if (!map.has(key)) map.set(key, [])
+          map.get(key)!.push(p)
+        }
+        const result: { party: string; politicians: IPolitician[] }[] = []
+        for (const partyValue of partyOrder) {
+          const list = map.get(partyValue)
+          if (list?.length) result.push({ party: partyValue, politicians: list })
+        }
+        Array.from(map.entries()).forEach(([party, list]) => {
+          if (!partyOrder.includes(party)) result.push({ party, politicians: list })
+        })
+        return result
+      })()
+    : null
 
   if (isLoading) {
     return <LoadingIndicator />
@@ -125,29 +146,65 @@ const ProportionCandidatesPage = () => {
           </div>
         </div>
 
-        <div className='rounded-md border'>
-          <Table className='w-full'>
-            <TableHeader>
-              <TableRow className='bg-gray-600 hover:bg-gray-600'>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>結果</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>名簿順位</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>候補者</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-0.5'>獲得票</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>当選数</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>小選挙区</TableHead>
-                <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredPoliticians.map((politician) => (
-                <ProportionCandidateCard key={politician.id} {...politician} />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        {byParty ? (
+          <div className='flex flex-col gap-16'>
+            {byParty.map(({ party, politicians }) => (
+              <div key={`party-${party}`}>
+                <div className='bg-green-600 text-white font-bold text-lg py-3 px-4 mb-0 rounded-t-md'>
+                  {party}
+                </div>
+                <Table className='w-full'>
+                  <TableHeader>
+                    <TableRow className='bg-gray-600 hover:bg-gray-600'>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>結果</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>名簿順位</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>候補者</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-0.5'>獲得票</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>当選数</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>小選挙区</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {politicians.map((politician) => (
+                      <ProportionCandidateCard key={politician.id} {...politician} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Fragment>
+            <div className='bg-green-600 text-white font-bold text-lg py-3 px-4 mb-0 rounded-t-md'>
+              {filterParty}
+            </div>
+            <Table className='w-full'>
+              <TableHeader>
+                <TableRow className='bg-gray-600 hover:bg-gray-600'>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>結果</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>名簿順位</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>候補者</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>政党</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-0.5'>獲得票</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>前元新</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[50px] p-0.5'>当選数</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[100px] p-1'>小選挙区</TableHead>
+                  <TableHead className='border border-gray-500 text-white text-center font-normal h-12 p-1'>サイト</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPoliticians.map((politician) => (
+                  <ProportionCandidateCard key={politician.id} {...politician} />
+                ))}
+              </TableBody>
+            </Table>
+          </Fragment>
+        )}
       </section>
 
       {/* CTA */}
