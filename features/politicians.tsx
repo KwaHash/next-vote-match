@@ -5,8 +5,8 @@ import LoadingIndicator from '@/components/loading-indicator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
-  Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
-  PaginationLink, PaginationNext, PaginationPrevious
+    Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
+    PaginationLink, PaginationNext, PaginationPrevious
 } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -20,7 +20,7 @@ import { HiMiniUserGroup } from 'react-icons/hi2'
 
 const PoliticiansPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterParty, setFilterParty] = useState('全国')
+  const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
   const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -65,7 +65,7 @@ const PoliticiansPage = () => {
         return false
       })
     }
-    if (filterParty !== '全国') {
+    if (filterParty !== '全て政党') {
       searchedPoliticians = searchedPoliticians.filter((politician) => politician.party?.includes(filterParty))
     }
     setFilteredPoliticians(searchedPoliticians)

@@ -20,7 +20,7 @@ import { PiMapPinAreaFill } from 'react-icons/pi'
 
 const ProportionCandidatesPage = () => {
   const [filterProportional, setFilterProportional] = useState<string>('北海道')
-  const [filterParty, setFilterParty] = useState('全国')
+  const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
   const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -45,7 +45,7 @@ const ProportionCandidatesPage = () => {
   }, [filterProportional])
 
   useEffect(() => {
-    if (filterParty !== '全国') {
+    if (filterParty !== '全て政党') {
       const filtered = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
       setFilteredPoliticians(filtered)
     } else {
@@ -54,8 +54,8 @@ const ProportionCandidatesPage = () => {
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterParty])
 
-  const partyOrder = parties.filter((p) => p.value !== '全国').map((p) => p.value)
-  const byParty = filterParty === '全国'
+  const partyOrder = parties.filter((p) => p.value !== '全て政党').map((p) => p.value)
+  const byParty = filterParty === '全て政党'
     ? (() => {
         const map = new Map<string, IPolitician[]>()
         for (const p of filteredPoliticians) {

@@ -21,7 +21,7 @@ import { PiMapPinAreaFill } from 'react-icons/pi'
 const DistrictCandidatesPage = () => {
   const [filterPrefecture, setFilterPrefecture] = useState<string>('北海道')
   const [filterDistrict, setFilterDistrict] = useState<string>('北海道1区')
-  const [filterParty, setFilterParty] = useState('全国')
+  const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
   const [filteredPoliticians, setFilteredPoliticians] = useState<IPolitician[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -51,7 +51,7 @@ const DistrictCandidatesPage = () => {
   }, [filterDistrict])
 
   useEffect(() => {
-    if (filterParty !== '全国') {
+    if (filterParty !== '全て政党') {
       const filteredPoliticians = allPoliticians.filter((politician) => politician.party?.includes(filterParty))
       setFilteredPoliticians(filteredPoliticians)
     } else {
