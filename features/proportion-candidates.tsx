@@ -110,8 +110,8 @@ const ProportionCandidatesPage = () => {
           <div className='flex items-center gap-2'>
             <FaChevronRight className='h-4 w-4 text-teal-600 dark:text-teal-400' />
             <h3 className='text-base font-bold text-foreground'>
-              比例代表 {filterProportional}
-              <span className='ml-2 text-sm leading-6'>{selectedProportionalDescription(filterProportional)}</span>
+              <span className='mr-5'>{filterProportional}</span>
+              <span>{selectedProportionalDescription(filterProportional)}</span>
             </h3>
           </div>
         </div>

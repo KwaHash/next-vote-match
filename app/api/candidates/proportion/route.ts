@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const proportional = searchParams.get('proportional')
 
     const politicians = await withDatabase(async (db) => {
-      const query = 'SELECT * FROM representatives2026 WHERE proportional = ? ORDER BY rank ASC'
+      const query = 'SELECT * FROM representatives2026 WHERE proportional = ? ORDER BY `rank` ASC'
       const [rows] = await db.query(query, [proportional])
       return rows
     })
