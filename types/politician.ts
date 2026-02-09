@@ -12,6 +12,8 @@ export interface IPolitician {
   avatar?: string
   title?: string
   biography?: string
+  vote_count: number
+  vote_result: number
   origin?: string
   shin?: string
   questions_answers?: string

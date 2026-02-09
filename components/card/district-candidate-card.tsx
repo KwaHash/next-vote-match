@@ -11,7 +11,13 @@ export const DistrictCandidateCard = (politician: IPolitician) => {
     <TableRow
       className='hover:bg-gray-100 transition-all duration-300'
     >
-      <TableCell className='border border-gray-300 text-center'></TableCell>
+      <TableCell className='border border-gray-300 text-center p-0'>
+        {politician.vote_result === 1 ? (
+          <span className='bg-green-500 text-white px-1.5 py-[3px] rounded-full'>当</span>
+        ) : politician.vote_result === 2 ? (
+          <span className='text-green-500 border border-green-500 px-1.5 py-[3px] rounded-full'>比</span>
+        ) : null}
+      </TableCell>
       <TableCell className='border border-gray-300 text-center p-1.5'>
         <Link href={`/politicians/${politician.id}`} className='hover:opacity-90 transition-opacity duration-300'>
           <div className='w-full h-40 relative overflow-hidden'>
@@ -37,7 +43,7 @@ export const DistrictCandidateCard = (politician: IPolitician) => {
         {politician.party || '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        —
+        {politician.vote_count}票
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
         {politician.shin || '—'}
