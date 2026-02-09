@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
 
     const politicians = await withDatabase(async (db) => {
       const query = filterByParty
-        ? 'SELECT * FROM representatives2026 where district = ? AND party = ?'
-        : 'SELECT * FROM representatives2026 where district = ?'
+        ? 'SELECT * FROM representatives2026 WHERE district = ? AND party = ? ORDER BY CASE vote_result WHEN 1 THEN 0 WHEN 2 THEN 1 ELSE 2 END, vote_count DESC'
+        : 'SELECT * FROM representatives2026 WHERE district = ? ORDER BY CASE vote_result WHEN 1 THEN 0 WHEN 2 THEN 1 ELSE 2 END, vote_count DESC'
       const params = filterByParty ? [district, party] : [district]
       const [rows] = await db.query(query, params)
       return rows
