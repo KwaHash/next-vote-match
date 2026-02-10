@@ -144,7 +144,7 @@ const ProportionCandidatesPage = () => {
                 <Table className='w-full'>
                   <TableHeader>
                     <TableRow className='bg-gray-600 hover:bg-gray-600'>
-                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>結果</TableHead>
+                      <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0'>結果</TableHead>
                       <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[40px] p-0.5'>名簿順位</TableHead>
                       <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>写真</TableHead>
                       <TableHead className='border border-gray-500 text-white text-center font-normal h-12 w-[150px] p-1'>候補者</TableHead>
