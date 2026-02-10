@@ -156,7 +156,7 @@ export const proportionCandidatesToCsv = (politicians: IPolitician[]): string =>
     const byLabel = getWebsiteLinksByLabel(p.website)
     const linkCells = WEBSITE_LINK_LABELS.map((key) => byLabel[key] ?? '')
     return [
-      p.vote_result === 2 ? '当' : p.vote_result === 1 ? '比' : '',
+      p.vote_result === 2 ? '当' : p.vote_result === 1 ? '小' : '',
       p.rank ?? '',
       p.kanji_name,
       p.hiragana_name ?? '',
