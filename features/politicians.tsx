@@ -129,7 +129,7 @@ const PoliticiansPage = () => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `政治家一覧-${filterParty}.csv`
+    a.download = `政治家一覧_${filterParty}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }

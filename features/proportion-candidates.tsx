@@ -74,7 +74,7 @@ const ProportionCandidatesPage = () => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `比例代表-${filterProportional}-${filterParty}.csv`
+    a.download = `比例代表_${filterProportional}_${filterParty}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
