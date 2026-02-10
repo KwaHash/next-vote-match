@@ -60,7 +60,7 @@ const DistrictCandidatesPage = () => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `小選挙区-${filterDistrict}-${filterParty}.csv`
+    a.download = `小選挙区_${filterDistrict}_${filterParty}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
