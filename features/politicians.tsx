@@ -5,18 +5,18 @@ import LoadingIndicator from '@/components/loading-indicator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
-    Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
-    PaginationLink, PaginationNext, PaginationPrevious
+  Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
+  PaginationLink, PaginationNext, PaginationPrevious
 } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { parties } from '@/constants/parties'
-import { cn } from '@/lib/utils'
+import { cn, politiciansListToCsv } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { HiMiniUserGroup } from 'react-icons/hi2'
+import { HiArrowDownTray, HiMiniUserGroup } from 'react-icons/hi2'
 
 const PoliticiansPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -123,6 +123,17 @@ const PoliticiansPage = () => {
     return <LoadingIndicator />
   }
 
+  const downloadCsv = () => {
+    const csv = politiciansListToCsv(allPoliticians)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = '政治家一覧.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className='min-h-screen bg-gradient-to-b from-background to-muted/20'>
       {/* Hero */}
@@ -178,11 +189,21 @@ const PoliticiansPage = () => {
 
       {/* Politicians List */}
       <section className='w-full max-w-6xl mx-auto px-4 md:px-8 py-12'>
-        <div className='flex justify-between items-center mb-6'>
+        <div className='flex justify-between items-center mb-6 flex-wrap gap-3'>
           <div className='text-sm'>
             全{filteredPoliticians.length}名のうち、{filteredPoliticians.length === 0 ? 0 : startIndex + 1}番から{filteredPoliticians.length === 0 ? 0 : Math.min(endIndex, filteredPoliticians.length)}番までを表示しております。
           </div>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-6'>
+            <Button
+              variant='outline'
+              size='sm'
+              className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
+              onClick={downloadCsv}
+              disabled={allPoliticians.length === 0}
+            >
+              <HiArrowDownTray className='h-4 w-4' />
+              CSVダウンロード
+            </Button>
             <span className='text-sm text-muted-foreground'>表示件数:</span>
             <Select
               value={itemsPerPage.toString()}

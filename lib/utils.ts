@@ -128,6 +128,27 @@ export const districtCandidatesToCsv = (politicians: IPolitician[]): string => {
   return '\uFEFF' + [headers.join(','), ...rows].join('\r\n')
 }
 
+export const politiciansListToCsv = (politicians: IPolitician[]): string => {
+  const linkHeaders = WEBSITE_LINK_LABELS.map((k) => LINK_HEADERS_JA[k] ?? k)
+  const headers = ['氏名', 'ふりがな', '生年月日', '年齢', '政党', '前元新', '当選数', '比例', ...linkHeaders]
+  const rows = politicians.map((p) => {
+    const byLabel = getWebsiteLinksByLabel(p.website)
+    const linkCells = WEBSITE_LINK_LABELS.map((key) => byLabel[key] ?? '')
+    return [
+      p.kanji_name,
+      p.hiragana_name ?? '',
+      p.birth_date ?? '',
+      getAgeFromBirthDate(p.birth_date) ?? '',
+      p.party ?? '',
+      p.shin ?? '',
+      `衆：${p.shu_count ?? ''}回、 参：${p.san_count ?? ''}回`,
+      p.proportional ?? '',
+      ...linkCells
+    ].map(escapeCsvCell).join(',')
+  })
+  return '\uFEFF' + [headers.join(','), ...rows].join('\r\n')
+}
+
 export const proportionCandidatesToCsv = (politicians: IPolitician[]): string => {
   const linkHeaders = WEBSITE_LINK_LABELS.map((k) => LINK_HEADERS_JA[k] ?? k)
   const headers = ['結果', '名簿順位', '氏名', 'ふりがな', '生年月日', '年齢', '政党', '獲得票', '前元新', '当選数', '小選挙区', ...linkHeaders]
