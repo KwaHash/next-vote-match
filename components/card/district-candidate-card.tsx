@@ -43,7 +43,7 @@ export const DistrictCandidateCard = (politician: IPolitician) => {
         {politician.party || '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        {politician.vote_count}票
+        {politician.vote_count.toLocaleString()}票
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
         {politician.shin || '—'}
