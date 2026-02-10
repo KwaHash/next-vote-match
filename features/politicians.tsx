@@ -124,12 +124,12 @@ const PoliticiansPage = () => {
   }
 
   const downloadCsv = () => {
-    const csv = politiciansListToCsv(allPoliticians)
+    const csv = politiciansListToCsv(filteredPoliticians)
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = '政治家一覧.csv'
+    a.download = `政治家一覧-${filterParty}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -224,6 +224,57 @@ const PoliticiansPage = () => {
             </Select>
           </div>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className='my-10'>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage > 1) setCurrentPage(currentPage - 1)
+                    }}
+                    className={cn('rounded-none hover:bg-secondary/80 transition-all duration-300 cursor-pointer px-3', currentPage === 1 ? 'pointer-events-none opacity-50' : '')}
+                  />
+                </PaginationItem>
+
+                {getPageNumbers().map((page, index) => (
+                  <PaginationItem key={index}>
+                    {page === 'ellipsis' ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        href='#'
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setCurrentPage(page as number)
+                        }}
+                        className='hover:bg-secondary/80 transition-all duration-300 cursor-pointer'
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage < totalPages) setCurrentPage(currentPage + 1)
+                    }}
+                    className={cn('rounded-none hover:bg-secondary/80 transition-all duration-300 cursor-pointer px-3', currentPage === totalPages ? 'pointer-events-none opacity-50' : '')}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
 
         <div className='rounded-md border'>
           <Table className='w-full'>
