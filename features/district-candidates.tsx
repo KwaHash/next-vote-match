@@ -8,14 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { prefectures } from '@/constants/areas'
 import { parties } from '@/constants/parties'
-import { selectedDistrictDescription } from '@/lib/utils'
+import { districtCandidatesToCsv, selectedDistrictDescription } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FaHeart } from 'react-icons/fa'
 import { FaChevronRight } from 'react-icons/fa6'
-import { HiMiniUserGroup } from 'react-icons/hi2'
+import { HiArrowDownTray, HiMiniUserGroup } from 'react-icons/hi2'
 import { PiMapPinAreaFill } from 'react-icons/pi'
 
 const DistrictCandidatesPage = () => {
@@ -52,6 +52,17 @@ const DistrictCandidatesPage = () => {
 
   if (isLoading) {
     return <LoadingIndicator />
+  }
+
+  const downloadCsv = () => {
+    const csv = districtCandidatesToCsv(allPoliticians)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${filterPrefecture}-${filterDistrict.replace(/\s/g, '-')}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -143,10 +154,20 @@ const DistrictCandidatesPage = () => {
 
       {/* Candidates List */}
       <section className='w-full max-w-6xl mx-auto px-4 md:px-8 py-12'>
-        <div className='flex justify-between items-center mb-6'>
+        <div className='flex justify-between items-center mb-6 flex-wrap gap-3'>
           <div className='text-sm'>
             現在、立候補されている候補者は{allPoliticians.length}名いらっしゃいます。
           </div>
+          <Button
+            variant='outline'
+            size='sm'
+            className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
+            onClick={downloadCsv}
+            disabled={allPoliticians.length === 0}
+          >
+            <HiArrowDownTray className='h-4 w-4' />
+            CSVダウンロード
+          </Button>
         </div>
 
         <div className='rounded-md border'>
