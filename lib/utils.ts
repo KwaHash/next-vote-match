@@ -127,3 +127,27 @@ export const districtCandidatesToCsv = (politicians: IPolitician[]): string => {
   })
   return '\uFEFF' + [headers.join(','), ...rows].join('\r\n')
 }
+
+export const proportionCandidatesToCsv = (politicians: IPolitician[]): string => {
+  const linkHeaders = WEBSITE_LINK_LABELS.map((k) => LINK_HEADERS_JA[k] ?? k)
+  const headers = ['結果', '名簿順位', '氏名', 'ふりがな', '生年月日', '年齢', '政党', '獲得票', '前元新', '当選数', '小選挙区', ...linkHeaders]
+  const rows = politicians.map((p) => {
+    const byLabel = getWebsiteLinksByLabel(p.website)
+    const linkCells = WEBSITE_LINK_LABELS.map((key) => byLabel[key] ?? '')
+    return [
+      p.vote_result === 2 ? '当' : p.vote_result === 1 ? '比' : '',
+      p.rank ?? '',
+      p.kanji_name,
+      p.hiragana_name ?? '',
+      p.birth_date ?? '',
+      getAgeFromBirthDate(p.birth_date) ?? '',
+      p.party ?? '',
+      p.vote_count ? p.vote_count.toLocaleString() : '',
+      p.shin ?? '',
+      p.shu_count ?? '',
+      p.district ?? '',
+      ...linkCells
+    ].map(escapeCsvCell).join(',')
+  })
+  return '\uFEFF' + [headers.join(','), ...rows].join('\r\n')
+}

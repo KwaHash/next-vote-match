@@ -44,7 +44,7 @@ export const ProportionCandidateCard = (politician: IPolitician) => {
         {politician.party || '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center'>
-        —
+        {politician.vote_count ? politician.vote_count.toLocaleString() + '票' : '—'}
       </TableCell>
       <TableCell className='border border-gray-300 text-center p-0.5'>
         {politician.shin || '—'}
