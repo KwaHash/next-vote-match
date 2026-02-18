@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { parties } from '@/constants/parties'
 import { cn, politiciansListToCsv } from '@/lib/utils'
+import { useAuth } from '@/providers/auth-provider'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
@@ -19,6 +20,7 @@ import { FaSearch } from 'react-icons/fa'
 import { HiArrowDownTray, HiMiniUserGroup } from 'react-icons/hi2'
 
 const PoliticiansPage = () => {
+  const { user_role } = useAuth()
   const [searchQuery, setSearchQuery] = useState('')
   const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
@@ -194,16 +196,18 @@ const PoliticiansPage = () => {
             全{filteredPoliticians.length}名のうち、{filteredPoliticians.length === 0 ? 0 : startIndex + 1}番から{filteredPoliticians.length === 0 ? 0 : Math.min(endIndex, filteredPoliticians.length)}番までを表示しております。
           </div>
           <div className='flex items-center gap-6'>
-            <Button
-              variant='outline'
-              size='sm'
-              className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
-              onClick={downloadCsv}
-              disabled={allPoliticians.length === 0}
-            >
-              <HiArrowDownTray className='h-4 w-4' />
-              CSVダウンロード
-            </Button>
+            {user_role === 'admin' && (
+              <Button
+                variant='outline'
+                size='sm'
+                className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
+                onClick={downloadCsv}
+                disabled={allPoliticians.length === 0}
+              >
+                <HiArrowDownTray className='h-4 w-4' />
+                CSVダウンロード
+              </Button>
+            )}
             <span className='text-sm text-muted-foreground'>表示件数:</span>
             <Select
               value={itemsPerPage.toString()}
