@@ -21,7 +21,7 @@ const MainHeader = () => {
     <header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='flex items-center justify-between w-full max-w-[1400px] px-8 mx-auto'>
         <Link href='/' className='py-1'>
-          <Image src='/images/logo.png' alt='わたしの政治ロゴ' width={120} height={80} className='aspect-[3/2]' priority />
+          <Image src='/images/logo.png' alt='わたしの政治ロゴ' width={142} height={78} priority />
         </Link>
         <div className='flex items-center gap-4'>
           <div className='items-center space-x-6 hidden md:flex'>
