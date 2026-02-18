@@ -9,6 +9,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components
 import { blocks } from '@/constants/areas'
 import { parties } from '@/constants/parties'
 import { proportionCandidatesToCsv, selectedProportionalDescription } from '@/lib/utils'
+import { useAuth } from '@/providers/auth-provider'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
 import Link from 'next/link'
@@ -19,6 +20,7 @@ import { HiArrowDownTray, HiMiniUserGroup } from 'react-icons/hi2'
 import { PiMapPinAreaFill } from 'react-icons/pi'
 
 const ProportionCandidatesPage = () => {
+  const { user_role } = useAuth()
   const [filterProportional, setFilterProportional] = useState<string>('北海道')
   const [filterParty, setFilterParty] = useState('全て政党')
   const [allPoliticians, setAllPoliticians] = useState<IPolitician[]>([])
@@ -144,16 +146,18 @@ const ProportionCandidatesPage = () => {
           <div className='text-sm'>
             現在、立候補されている候補者は{allPoliticians.length}名いらっしゃいます。
           </div>
-          <Button
-            variant='outline'
-            size='sm'
-            className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
-            onClick={downloadCsv}
-            disabled={allPoliticians.length === 0}
-          >
-            <HiArrowDownTray className='h-4 w-4' />
-            CSVダウンロード
-          </Button>
+          {user_role === 'admin' && (
+            <Button
+              variant='outline'
+              size='sm'
+              className='rounded-none gap-2 bg-secondary text-white hover:bg-secondary/80 transition-all duration-300'
+              onClick={downloadCsv}
+              disabled={allPoliticians.length === 0}
+            >
+              <HiArrowDownTray className='h-4 w-4' />
+              CSVダウンロード
+            </Button>
+          )}
         </div>
 
         {byParty ? (
