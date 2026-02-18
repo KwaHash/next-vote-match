@@ -1,10 +1,9 @@
-import MainHeader from '@/components/main-header'
 import TailwindIndicator from '@/components/tailwind-indicator'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { Toaster } from '@/components/ui/toaster'
 import '@/index.css'
 import type { Metadata } from 'next'
-import Providers from './providers'
+import { StrictMode } from 'react'
 
 export const metadata: Metadata = {
   title: 'わたしの政治',
@@ -23,16 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ja' suppressHydrationWarning>
-      <body>
-        <Providers>
+    <StrictMode>
+      <html lang='ja' suppressHydrationWarning>
+        <body>
           <Toaster />
           <Sonner />
-          <MainHeader />
-          {children}
-        </Providers>
-        <TailwindIndicator />
-      </body>
-    </html>
+          <div className='flex flex-col w-full min-h-screen overflow-x-hidden overflow-y-auto'>
+            {children}
+          </div>
+          <TailwindIndicator />
+        </body>
+      </html>
+    </StrictMode>
   )
 }

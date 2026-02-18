@@ -1,0 +1,16 @@
+import MainHeader from '@/components/header/main-header'
+
+export default function TermsLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className='flex flex-col min-h-screen'>
+      <MainHeader />
+      <main className='flex flex-col w-full grow bg-[#eee]'>
+        {children}
+      </main>
+    </div>
+  )
+}
