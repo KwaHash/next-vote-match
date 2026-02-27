@@ -8,7 +8,7 @@ export default function TermsLayout({
   return (
     <div className='flex flex-col min-h-screen'>
       <MainHeader />
-      <main className='flex flex-col w-full grow bg-[#eee]'>
+      <main className='flex flex-col w-full grow bg-[#eee] min-h-[calc(100dvh_-_88px)]'>
         {children}
       </main>
     </div>

@@ -4,6 +4,7 @@ import InputField from '@/components/input/input-field'
 import RequiredLabel from '@/components/label/required-label'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/providers/auth-provider'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import Image from 'next/image'
@@ -22,6 +23,7 @@ interface ILogInForm {
 }
 
 export default function LogInPage() {
+  const { updateAuthState } = useAuth()
   const router = useRouter()
   const [error, setError] = useState<string>('')
 
@@ -51,7 +53,17 @@ export default function LogInPage() {
         access_token,
         refresh_token
       }))
-      router.push('/about')
+      const { data } = await axios.post('/api/auth/me', {
+        access_token,
+        refresh_token,
+      })
+
+      updateAuthState({
+        user_id: data.user_id,
+        user_email: data.user_email,
+        user_role: data.user_role,
+      })
+      router.push('/politicians')
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const error = err.response?.data?.error

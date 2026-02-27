@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   updateAuthState: () => {},
 })
 
-const PUBLIC_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password']
+const PUBLIC_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password', '/about', '/match']
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>({
     user_id: '',
     user_email: '',
-    user_role: 'user',
+    user_role: '',
   })
 
   useEffect(() => {
