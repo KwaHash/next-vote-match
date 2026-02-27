@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const tokenData = localStorage.getItem('jwt-token')
       if (!tokenData) {
         setIsLoading(false)
-        router.push('/login')
+        router.push('/about')
         return
       }
 
@@ -77,11 +77,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setIsLoading(false)
         } else {
           setIsLoading(false)
-          router.push('/login')
+          router.push('/about')
         }
       } catch {
         setIsLoading(false)
-        router.push('/login')
+        router.push('/about')
       }
     }
 
