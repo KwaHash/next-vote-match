@@ -39,6 +39,17 @@ async function initializeDatabase(db: Connection) {
     )
   `)
 
+  // email verification tokens
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS verification_tokens (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      token VARCHAR(255) NOT NULL,
+      expires_at DATETIME NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `)
+
   // politicians
   await db.execute(`
     CREATE TABLE IF NOT EXISTS politicians (
