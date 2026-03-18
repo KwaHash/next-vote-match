@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   updateAuthState: () => {},
 })
 
-const PUBLIC_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password', '/about', '/match']
+const PUBLIC_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password', '/about', '/match', '/ai-chat']
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
