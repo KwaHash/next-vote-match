@@ -7,10 +7,11 @@ import { BsStars } from 'react-icons/bs'
 import { FaListUl } from 'react-icons/fa'
 import { FaListCheck } from 'react-icons/fa6'
 import { HiOutlineInformationCircle } from 'react-icons/hi'
-import { RiLogoutCircleRLine } from 'react-icons/ri'
+import { RiLogoutCircleRLine, RiRobot2Line } from 'react-icons/ri'
 
 const navItems = [
   { href: '/about', label: 'わたしの政治とは', icon: HiOutlineInformationCircle },
+  { href: '/ai-chat', label: 'AIチャット', icon: RiRobot2Line },
   { href: '/match', label: 'マッチング', icon: BsStars },
   { href: '/politicians', label: '政治家一覧', icon: FaListUl },
   { href: '/candidates/district', label: '小選挙区', icon: FaListCheck },
