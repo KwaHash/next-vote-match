@@ -22,7 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   updateAuthState: () => {},
 })
 
-const PUBLIC_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password', '/about', '/match', '/ai-chat']
+const AUTH_PATHS = ['/login', '/sign-up', '/forgot-password', '/reset-password']
+const COMMON_PATHS = ['/about', '/match', '/ai-chat']
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -38,14 +39,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkAuth = async () => {
       setIsLoading(true)
 
-      const isPublicPath = PUBLIC_PATHS.some((path) => pathName.startsWith(path))
-      if (isPublicPath) {
+      const isAuthPath = AUTH_PATHS.some((path) => pathName.startsWith(path))
+      if (isAuthPath) {
         setIsLoading(false)
         return
       }
 
+      const isCommonPath = COMMON_PATHS.some((path) => pathName.startsWith(path))
       const tokenData = localStorage.getItem('jwt-token')
       if (!tokenData) {
+        if (isCommonPath) {
+          setIsLoading(false)
+          return
+        }
         setIsLoading(false)
         router.push('/about')
         return
