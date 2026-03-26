@@ -105,4 +105,21 @@ async function initializeDatabase(db: Connection) {
       questions_answers JSON
     )
   `)
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS resources (
+      id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+      provider_type VARCHAR(64) NOT NULL,
+      provider_name VARCHAR(255) NOT NULL,
+      contact_email VARCHAR(255) NOT NULL,
+      contact_phone VARCHAR(64),
+      prefecture VARCHAR(64) NOT NULL,
+      municipality VARCHAR(255),
+      content TEXT NOT NULL,
+      price_type VARCHAR(64) NOT NULL,
+      availability VARCHAR(64) NOT NULL,
+      coverage_area JSON,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `)
 }
