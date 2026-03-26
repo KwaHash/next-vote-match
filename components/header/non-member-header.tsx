@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BsStars } from 'react-icons/bs'
-import { HiOutlineInformationCircle } from 'react-icons/hi'
+import { HiOutlineBookOpen, HiOutlineInformationCircle } from 'react-icons/hi'
 import { LuUserRound } from 'react-icons/lu'
 import { RiRobot2Line } from 'react-icons/ri'
 
@@ -12,6 +12,7 @@ const navItems = [
   { href: '/about', label: 'わたしの政治とは', icon: HiOutlineInformationCircle },
   { href: '/ai-chat', label: 'AIチャット', icon: RiRobot2Line },
   { href: '/match', label: 'マッチング', icon: BsStars },
+  { href: '/support-resources/register', label: '支援リソース', icon: HiOutlineBookOpen },
   { href: '/login', label: '政治家の方', icon: LuUserRound },
 ] as const
 

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { BsStars } from 'react-icons/bs'
 import { FaListUl } from 'react-icons/fa'
 import { FaListCheck } from 'react-icons/fa6'
-import { HiOutlineInformationCircle } from 'react-icons/hi'
+import { HiOutlineBookOpen, HiOutlineInformationCircle } from 'react-icons/hi'
 import { RiLogoutCircleRLine, RiRobot2Line } from 'react-icons/ri'
 
 const navItems = [
@@ -16,10 +16,11 @@ const navItems = [
   { href: '/politicians', label: '政治家一覧', icon: FaListUl },
   { href: '/candidates/district', label: '小選挙区', icon: FaListCheck },
   { href: '/candidates/proportion', label: '比例代表', icon: FaListCheck },
+  { href: '/support-resources/register', label: '支援リソース', icon: HiOutlineBookOpen },
   { href: '/logout', label: 'ログアウト', icon: RiLogoutCircleRLine },
 ] as const
 
-export default function NonMemberHeader() {
+export default function MemberHeader() {
   const pathname = usePathname()
   return (
     <div className='hidden md:flex items-center gap-6'>
