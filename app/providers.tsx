@@ -1,7 +1,7 @@
 'use client'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
-// import { AuthProvider } from '@/providers/auth-provider'
+import { AuthProvider } from '@/providers/auth-provider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
 import { useState } from 'react'
@@ -21,11 +21,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-        {/* <AuthProvider> */}
+        <AuthProvider>
           <TooltipProvider>
             {children}
           </TooltipProvider>
-        {/* </AuthProvider> */}
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )
