@@ -1,7 +1,5 @@
-'use client'
-import { useRouter } from 'next/navigation'
+import AboutPage from '@/features/about'
 
 export default function Home() {
-  const router = useRouter()
-  router.push('/about')
+  return <AboutPage />
 }
