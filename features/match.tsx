@@ -17,7 +17,6 @@ import { parties } from '@/constants/parties'
 import { selectedDistrictDescription } from '@/lib/utils'
 import { IPolitician } from '@/types/politician'
 import axios from 'axios'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { FaArrowLeft, FaArrowRight, FaChevronRight } from 'react-icons/fa6'
@@ -160,9 +159,9 @@ const MatchPage = () => {
         </section>
         {/* Actions */}
         <div className='flex flex-col items-center sm:flex-row gap-4 px-4 justify-center pt-12 pb-20'>
-          <Button className='w-[250px] h-auto px-10 py-4 rounded-none bg-secondary text-secondary-foreground hover:bg-secondary/80 text-base' asChild>
+          {/* <Button className='w-[250px] h-auto px-10 py-4 rounded-none bg-secondary text-secondary-foreground hover:bg-secondary/80 text-base' asChild>
             <Link href='/politicians'>すべての政治家を見る</Link>
-          </Button>
+          </Button> */}
           <Button className='w-[250px] h-auto px-10 py-4 rounded-none text-base'
             onClick={() => {
               setShowResults(false)
