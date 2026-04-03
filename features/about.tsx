@@ -1,5 +1,6 @@
 import CTA from '@/components/home/cta'
 import Fairness from '@/components/home/fairness'
+import FAQ from '@/components/home/faq'
 import Features from '@/components/home/features'
 import Hero from '@/components/home/hero'
 import HowItWorks from '@/components/home/how-it-works'
@@ -13,6 +14,7 @@ const AboutPage = () => {
       <Features />
       <HowItWorks />
       <Fairness />
+      <FAQ />
       <CTA />
     </div>
   )
