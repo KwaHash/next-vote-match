@@ -22,7 +22,7 @@ const MainHeader = () => {
   })
 
   return (
-    <header className={cn('fixed left-0 top-0 w-full z-50 bg-white transition-all ease-in-out duration-300', stickyMenu && 'shadow')}>
+    <header className='fixed left-0 top-0 w-full z-50 bg-white transition-all ease-in-out duration-300 shadow'>
       <div className='mx-auto max-w-screen-2xl px-8'>
         <div className={cn('flex justify-between ease-out duration-300', stickyMenu ? 'py-1' : 'py-3')}>
           <Link href='/'>
