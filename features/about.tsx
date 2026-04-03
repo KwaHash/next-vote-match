@@ -1,18 +1,28 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { FAIRNESS_ITEMS, FEATURES, HOW_IT_WORKS_STEPS } from '@/constants/about'
+import Image from 'next/image'
+import Link from 'next/link'
 import { FiHeart, FiShield } from 'react-icons/fi'
 import { HiOutlineSparkles } from 'react-icons/hi2'
-
-import Link from 'next/link'
 
 const AboutPage = () => {
   return (
     <div className='min-h-screen bg-gradient-to-b from-background to-muted/20'>
       {/* Hero */}
-      <section className='py-20 bg-gradient-to-br from-primary/10 to-accent/10'>
+      
+      <section className='relative py-20'>
         <div className='container'>
-          <div className='max-w-3xl mx-auto text-center space-y-6'>
+          <div className='absolute top-0 left-0 w-full h-64 md:h-80 overflow-hidden'>
+            <Image
+              src='/images/hero.png'
+              alt='カバー画像'
+              fill
+              className='w-full h-full object-cover'
+            />
+            <div className='absolute inset-0 bg-gradient-to-t from-background/100 to-transparent' />
+          </div>
+          <div className='max-w-3xl mx-auto text-center space-y-6 relative z-10'>
             <h1 className='text-4xl md:text-5xl font-bold'>わたしの政治とは</h1>
             <p className='text-xl text-muted-foreground'>推し活×政治で、新しい政治参加のカタチを創る</p>
           </div>
