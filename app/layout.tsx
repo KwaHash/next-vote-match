@@ -32,7 +32,7 @@ export default function RootLayout({
             <Sonner />
             <div className='flex flex-col w-full min-h-screen overflow-x-hidden overflow-y-auto'>
               <MainHeader />
-              <main className='flex flex-col w-full grow bg-[#eee] min-h-[calc(100dvh_-_88px)]'>
+              <main className='flex flex-col w-full grow bg-[#eee] pt-20'>
                 {children}
               </main>
             </div>
