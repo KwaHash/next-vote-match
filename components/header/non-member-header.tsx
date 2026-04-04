@@ -5,10 +5,12 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BsStars } from 'react-icons/bs'
+import { FiHome } from 'react-icons/fi'
 import { LuUserRound } from 'react-icons/lu'
 import { RiRobot2Line } from 'react-icons/ri'
 
 const navItems = [
+  { href: '/', label: 'ホーム', icon: FiHome },
   { href: '/ai-chat', label: 'AIチャット', icon: RiRobot2Line },
   { href: '/match', label: 'マッチング', icon: BsStars },
 ] as const
