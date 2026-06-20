@@ -16,6 +16,7 @@
 | 2026-06-20 | 政策マッチング診断 | `app/prototype/match/page.tsx` | 作業中 |
 | 2026-06-20 | 候補者一覧・検索（全選挙種別・診断連動） | `app/prototype/candidates/page.tsx` | 作業中 |
 | 2026-06-20 | 政策一覧（課題から見る）・政策別寄付 | `app/prototype/policies/page.tsx`, `app/prototype/policies/[id]/page.tsx` | 作業中 |
+| 2026-06-20 | 透明化ダッシュボード（国民向けMVP高優先 完了） | `app/prototype/dashboard/page.tsx` | 作業中 |
 | 2026-06-20 | プロトタイプ共通データ（政策に課題/解決案/支援状況を追加） | `app/prototype/_data.ts` | 作業中 |
 
 ## 政策一覧・政策別寄付（`/prototype/policies`, `/prototype/policies/[id]`）

@@ -37,6 +37,18 @@ const PROTOTYPES = [
       '政策別に寄付（今回だけ/月額・配分指定）→ Donation ID 発行（本番は本人確認・決済）',
     ],
   },
+  {
+    href: '/prototype/dashboard',
+    title: '透明化ダッシュボード',
+    status: '作業中',
+    description:
+      '集まった寄付が、何に・どこで・どんな成果に使われたかを公開する画面（ログイン不要）。「寄付して終わり」でなく使い道が見えることが最大の差別化点。',
+    notes: [
+      '総額/支援者数/支出済み/未使用残高、支出分類、地域別配分を可視化',
+      '政策別の支援状況・成果一覧（Impact ID）・月次レポート',
+      '本番は寄付ID(DON)→支出ID(EXP)→成果ID(IMP)を紐づけ自動集計',
+    ],
+  },
 ]
 
 export default function PrototypeIndexPage() {
