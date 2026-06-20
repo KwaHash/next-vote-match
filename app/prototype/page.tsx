@@ -49,6 +49,28 @@ const PROTOTYPES = [
       '本番は寄付ID(DON)→支出ID(EXP)→成果ID(IMP)を紐づけ自動集計',
     ],
   },
+  {
+    href: '/prototype/report',
+    title: 'あなたの寄付レポート',
+    status: '作業中',
+    description:
+      '自分の寄付が、どの政策に・どう配分され・どう使われ・どんな成果になったかを Donation ID 単位で確認する画面。',
+    notes: [
+      '政策別寄付ページでの寄付（DON-ID）ごとに使途・残高を表示',
+      '地域配分・使途・成果を表示（本番は donations→allocations→expenses→impacts）',
+    ],
+  },
+  {
+    href: '/prototype/compare',
+    title: '候補者比較',
+    status: '作業中',
+    description:
+      '候補者を最大3名まで選び、政党・選挙種別・地域・一致率・透明化・注力政策を並べて比較する画面。候補者一覧の各候補から個別詳細ページにも遷移できる。',
+    notes: [
+      '候補者を追加して比較表を表示',
+      '候補者一覧 → 個別詳細ページ（公約/実績/政治資金透明化/SNS）も実装',
+    ],
+  },
 ]
 
 export default function PrototypeIndexPage() {

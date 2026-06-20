@@ -134,7 +134,7 @@ export default function CitizenCandidatesPage() {
             const pct = matchPct(c)
             const level = typeLevel(c.electionType)
             return (
-              <div key={c.id} className='rounded-xl border border-gray-200 bg-white p-4'>
+              <Link key={c.id} href={`/prototype/candidates/${c.id}`} className='block rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md'>
                 <div className='flex items-start gap-3'>
                   <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gray-50 text-2xl'>{themeEmoji(c.themes[0])}</div>
                   <div className='min-w-0 flex-1'>
@@ -168,7 +168,7 @@ export default function CitizenCandidatesPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </Link>
             )
           })}
         </div>

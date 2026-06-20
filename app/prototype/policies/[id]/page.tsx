@@ -50,7 +50,21 @@ export default function PolicyDetailPage() {
   const donate = () => {
     // プロトタイプ: Donation ID を発行（本番は本人確認→決済→採番）
     const seq = String(Math.floor(Date.now() / 1000) % 1000000).padStart(6, '0')
-    setDonationId(`DON-2026-${seq}`)
+    const did = `DON-2026-${seq}`
+    // 寄付レポート用に記録（本番は donations テーブル）
+    try {
+      const raw = localStorage.getItem('proto_donations_v1')
+      const arr = raw ? JSON.parse(raw) : []
+      arr.unshift({
+        id: did, themeId: theme.id, themeName: theme.name, emoji: theme.emoji,
+        amount, donateType, allocMode, region, allocation: theme.allocation,
+        date: new Date().toISOString().slice(0, 10),
+      })
+      localStorage.setItem('proto_donations_v1', JSON.stringify(arr))
+    } catch {
+      /* ignore */
+    }
+    setDonationId(did)
   }
 
   const inputCls =
