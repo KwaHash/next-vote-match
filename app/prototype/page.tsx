@@ -25,6 +25,18 @@ const PROTOTYPES = [
       'データ出どころ（公式取込/本人入力済み）を可視化。本番は politicians×elections×candidacies',
     ],
   },
+  {
+    href: '/prototype/policies',
+    title: '政策一覧・政策別寄付',
+    status: '作業中',
+    description:
+      '「政党」ではなく「課題」から政策を見て、支援状況を確認し、政策単位で寄付・応援できる画面。詳細ページで課題・解決案・賛同候補・地域配分を見て寄付できる。',
+    notes: [
+      '課題から政策を一覧（診断済みなら関心テーマを上位表示）',
+      '政策詳細で課題/解決案/支援状況/賛同候補/地域配分を表示',
+      '政策別に寄付（今回だけ/月額・配分指定）→ Donation ID 発行（本番は本人確認・決済）',
+    ],
+  },
 ]
 
 export default function PrototypeIndexPage() {

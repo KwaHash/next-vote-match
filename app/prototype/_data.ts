@@ -19,21 +19,26 @@ export interface PolicyTheme {
   animal: string // 診断結果の「あなたのタイプ」動物キャラ（構想の方針）
   summary: string
   question: string // 診断での問いかけ
+  challenge: string // 現状課題
+  solution: string // 解決案
+  budget: number // 必要予算（円）
+  raised: number // 集まった支援額（円）
+  supporters: number // 支援者数
   // 政策別の初期配分（%）: 市区町村 / 都道府県 / 国会（全体構想 6章より）
   allocation: { municipality: number; prefecture: number; national: number }
 }
 
 export const POLICY_THEMES: PolicyTheme[] = [
-  { id: 'bosai', name: '防災・災害死ゼロ', emoji: '🛟', animal: 'ビーバー', summary: '災害で命を落とさない社会へ', question: '防災・災害対策に力を入れてほしい', allocation: { municipality: 40, prefecture: 35, national: 25 } },
-  { id: 'nettyusho', name: '高齢者熱中症対策', emoji: '🌡️', animal: 'コアラ', summary: '高齢者を熱中症から守る', question: '高齢者の熱中症・健康対策を進めてほしい', allocation: { municipality: 50, prefecture: 30, national: 20 } },
-  { id: 'kotsu', name: '交通事故削減', emoji: '🚸', animal: 'カメ', summary: '交通事故ゼロをめざす', question: '交通事故を減らす取り組みを強めてほしい', allocation: { municipality: 45, prefecture: 35, national: 20 } },
-  { id: 'kosodate', name: '子育て・教育', emoji: '🎒', animal: 'ペンギン', summary: '子育て・教育を社会で支える', question: '子育て・教育支援を拡充してほしい', allocation: { municipality: 40, prefecture: 30, national: 30 } },
-  { id: 'nyusatsu', name: '入札透明化', emoji: '🔍', animal: 'タカ', summary: '税金の使い道を透明に', question: '政治とお金・入札の透明化を進めてほしい', allocation: { municipality: 45, prefecture: 35, national: 20 } },
-  { id: 'ai-gyosei', name: 'AI行政改革', emoji: '🤖', animal: 'フクロウ', summary: 'AIで行政を効率化', question: 'AIやデジタルで行政を効率化してほしい', allocation: { municipality: 30, prefecture: 30, national: 40 } },
-  { id: 'jinken', name: '人権外交', emoji: '🕊️', animal: 'ハト', summary: '人権を大切にする外交', question: '人権を重視した外交を進めてほしい', allocation: { municipality: 5, prefecture: 10, national: 85 } },
-  { id: 'energy', name: 'エネルギー・蓄電池', emoji: '🔋', animal: 'リス', summary: 'エネルギーの安定と脱炭素', question: 'エネルギー・蓄電池に投資してほしい', allocation: { municipality: 20, prefecture: 30, national: 50 } },
-  { id: 'chiho-zaisei', name: '地方財政改革', emoji: '🏛️', animal: 'アリ', summary: '地方の財政を立て直す', question: '地方財政の改革を進めてほしい', allocation: { municipality: 30, prefecture: 30, national: 40 } },
-  { id: 'kanko', name: '観光・温泉振興', emoji: '♨️', animal: 'イルカ', summary: '観光・温泉で地域を元気に', question: '観光・温泉で地域を元気にしてほしい', allocation: { municipality: 35, prefecture: 35, national: 30 } },
+  { id: 'bosai', name: '防災・災害死ゼロ', emoji: '🛟', animal: 'ビーバー', summary: '災害で命を落とさない社会へ', question: '防災・災害対策に力を入れてほしい', challenge: '避難所の電源・通信・トイレが不足している', solution: '蓄電池・通信・簡易トイレを優先配備し、災害死ゼロをめざす', budget: 5000000, raised: 2300000, supporters: 412, allocation: { municipality: 40, prefecture: 35, national: 25 } },
+  { id: 'nettyusho', name: '高齢者熱中症対策', emoji: '🌡️', animal: 'コアラ', summary: '高齢者を熱中症から守る', question: '高齢者の熱中症・健康対策を進めてほしい', challenge: '独居高齢者の熱中症搬送が年々増加している', solution: '見守り・冷房費補助・涼み所の整備を進める', budget: 3000000, raised: 980000, supporters: 230, allocation: { municipality: 50, prefecture: 30, national: 20 } },
+  { id: 'kotsu', name: '交通事故削減', emoji: '🚸', animal: 'カメ', summary: '交通事故ゼロをめざす', question: '交通事故を減らす取り組みを強めてほしい', challenge: '通学路・生活道路での事故が後を絶たない', solution: '危険箇所の改良とゾーン30の拡大', budget: 2500000, raised: 1100000, supporters: 180, allocation: { municipality: 45, prefecture: 35, national: 20 } },
+  { id: 'kosodate', name: '子育て・教育', emoji: '🎒', animal: 'ペンギン', summary: '子育て・教育を社会で支える', question: '子育て・教育支援を拡充してほしい', challenge: '教育費の負担と待機児童が課題', solution: '給食無償化・保育の受け皿拡大', budget: 8000000, raised: 4600000, supporters: 905, allocation: { municipality: 40, prefecture: 30, national: 30 } },
+  { id: 'nyusatsu', name: '入札透明化', emoji: '🔍', animal: 'タカ', summary: '税金の使い道を透明に', question: '政治とお金・入札の透明化を進めてほしい', challenge: '入札の不透明さ・談合リスクへの不信', solution: '入札データの公開と第三者チェックの仕組み', budget: 2000000, raised: 1450000, supporters: 333, allocation: { municipality: 45, prefecture: 35, national: 20 } },
+  { id: 'ai-gyosei', name: 'AI行政改革', emoji: '🤖', animal: 'フクロウ', summary: 'AIで行政を効率化', question: 'AIやデジタルで行政を効率化してほしい', challenge: '行政手続きが煩雑で時間とコストがかかる', solution: 'AI窓口・申請のデジタル化で待ち時間を削減', budget: 4000000, raised: 1200000, supporters: 210, allocation: { municipality: 30, prefecture: 30, national: 40 } },
+  { id: 'jinken', name: '人権外交', emoji: '🕊️', animal: 'ハト', summary: '人権を大切にする外交', question: '人権を重視した外交を進めてほしい', challenge: '国際的な人権課題への発信が弱い', solution: '人権を重視した外交方針の確立と発信', budget: 3500000, raised: 620000, supporters: 150, allocation: { municipality: 5, prefecture: 10, national: 85 } },
+  { id: 'energy', name: 'エネルギー・蓄電池', emoji: '🔋', animal: 'リス', summary: 'エネルギーの安定と脱炭素', question: 'エネルギー・蓄電池に投資してほしい', challenge: '電力の安定供給と電気代高騰', solution: '蓄電池・再エネの地域導入を支援', budget: 6000000, raised: 2800000, supporters: 388, allocation: { municipality: 20, prefecture: 30, national: 50 } },
+  { id: 'chiho-zaisei', name: '地方財政改革', emoji: '🏛️', animal: 'アリ', summary: '地方の財政を立て直す', question: '地方財政の改革を進めてほしい', challenge: '地方財政のひっ迫で住民サービスが縮小', solution: '歳出の見直しと自主財源の確保', budget: 4500000, raised: 1000000, supporters: 175, allocation: { municipality: 30, prefecture: 30, national: 40 } },
+  { id: 'kanko', name: '観光・温泉振興', emoji: '♨️', animal: 'イルカ', summary: '観光・温泉で地域を元気に', question: '観光・温泉で地域を元気にしてほしい', challenge: '観光客の減少と地域経済の停滞', solution: '温泉・体験観光の魅力発信と受け入れ整備', budget: 3000000, raised: 1700000, supporters: 264, allocation: { municipality: 35, prefecture: 35, national: 30 } },
 ]
 
 // 選挙種別（全種別を level=地域階層に紐づける。本番は elections テーブル）

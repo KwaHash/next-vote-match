@@ -15,7 +15,13 @@
 |---|---|---|---|
 | 2026-06-20 | 政策マッチング診断 | `app/prototype/match/page.tsx` | 作業中 |
 | 2026-06-20 | 候補者一覧・検索（全選挙種別・診断連動） | `app/prototype/candidates/page.tsx` | 作業中 |
-| 2026-06-20 | プロトタイプ共通データ | `app/prototype/_data.ts` | 作業中 |
+| 2026-06-20 | 政策一覧（課題から見る）・政策別寄付 | `app/prototype/policies/page.tsx`, `app/prototype/policies/[id]/page.tsx` | 作業中 |
+| 2026-06-20 | プロトタイプ共通データ（政策に課題/解決案/支援状況を追加） | `app/prototype/_data.ts` | 作業中 |
+
+## 政策一覧・政策別寄付（`/prototype/policies`, `/prototype/policies/[id]`）
+課題から政策を一覧（診断済みなら関心テーマを上位表示）。詳細で課題・解決案・支援状況・地域配分・賛同候補を表示し、
+政策単位で寄付（今回だけ/月額・おまかせ/地域指定）。寄付確定で Donation ID（DON-2026-xxxxxx）を発行。
+**本番:** 本人確認・寄付上限・政治資金規正法チェック・決済・収支報告は実装版で（BACKLOG 8章）。寄付は policy_funds/donations へ。
 
 ## 詳細
 
