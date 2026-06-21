@@ -11,6 +11,7 @@
  */
 
 import { POLICY_THEMES, SAMPLE_CANDIDATES } from '../../_data'
+import { STORE_KEYS, loadJSON, saveJSON } from '../../_store'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
@@ -68,18 +69,14 @@ export default function PolicyDetailPage() {
     const seq = String(Math.floor(Date.now() / 1000) % 1000000).padStart(6, '0')
     const did = `DON-2026-${seq}`
     // 寄付レポート用に記録（本番は donations テーブル）
-    try {
-      const raw = localStorage.getItem('proto_donations_v1')
-      const arr = raw ? JSON.parse(raw) : []
-      arr.unshift({
-        id: did, themeId: theme.id, themeName: theme.name, emoji: theme.emoji,
-        amount, donateType, allocMode, region, allocation: theme.allocation,
-        date: new Date().toISOString().slice(0, 10),
-      })
-      localStorage.setItem('proto_donations_v1', JSON.stringify(arr))
-    } catch {
-      /* ignore */
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const arr = loadJSON<any[]>(STORE_KEYS.donations, [])
+    arr.unshift({
+      id: did, themeId: theme.id, themeName: theme.name, emoji: theme.emoji,
+      amount, donateType, allocMode, region, allocation: theme.allocation,
+      date: new Date().toISOString().slice(0, 10),
+    })
+    saveJSON(STORE_KEYS.donations, arr)
     setDonationId(did)
   }
 

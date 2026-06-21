@@ -10,6 +10,7 @@
  */
 
 import { ELECTION_TYPES, POLICY_THEMES, SAMPLE_CANDIDATES } from '../../_data'
+import { loadJSON } from '../../_store'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
@@ -25,12 +26,8 @@ export default function CandidateDetailPage() {
   const [weights, setWeights] = useState<Record<string, number> | null>(null)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(MATCH_RESULT_KEY)
-      if (raw) setWeights(JSON.parse(raw).weights ?? null)
-    } catch {
-      /* ignore */
-    }
+    const d = loadJSON<{ weights?: Record<string, number> } | null>(MATCH_RESULT_KEY, null)
+    if (d) setWeights(d.weights ?? null)
   }, [])
 
   if (!c) {
