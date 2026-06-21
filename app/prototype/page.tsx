@@ -85,6 +85,17 @@ const PROTOTYPES = [
     ],
   },
   {
+    href: '/prototype/election',
+    title: '●●選挙 候補者一覧（CSV取込＋比較）',
+    status: '作業中',
+    description:
+      '個別選挙（例: 杉並区長選挙）の候補者をCSVで取り込み、3つの軸で比較する画面。軸1 政策の重点（あなたの関心との一致）/ 軸2 実行力・現実性（財源・実績）/ 軸3 透明性・信頼。',
+    notes: [
+      'CSV貼り付け/ファイル選択/サンプル投入で候補者を反映',
+      '3軸の比較表＋診断との関心一致。本番は管理画面でCSV→DB取込',
+    ],
+  },
+  {
     href: '/prototype/compare',
     title: '候補者比較',
     status: '作業中',
