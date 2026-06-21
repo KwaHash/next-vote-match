@@ -84,3 +84,63 @@ export const SAMPLE_CANDIDATES: PrototypeCandidate[] = [
   { id: 13, name: '吉田 翔', party: '社民党', electionType: 'shigi', region: '東京都', district: '渋谷区', status: '現職', themes: ['kosodate', 'jinken'], transparency: 70, source: 'official' },
   { id: 14, name: '松本 直子', party: '日本保守党', electionType: 'shigi', region: '東京都', district: '世田谷区', status: '新人', themes: ['bosai', 'nettyusho'], transparency: 53, source: 'self' },
 ]
+
+// ===== 国家ビジョン軸（追加要望 2026-06-20） =====
+
+// 日本のあるべき姿（6本柱）
+export interface Vision {
+  id: string
+  no: number
+  title: string
+  emoji: string
+  desc: string
+  themeIds: string[] // 関連政策テーマ
+}
+
+export const VISIONS: Vision[] = [
+  { id: 'life', no: 1, title: '命を守る国', emoji: '🛟', desc: '防災・医療・交通事故・熱中症・自殺対策', themeIds: ['bosai', 'nettyusho', 'kotsu'] },
+  { id: 'earn', no: 2, title: '稼げる国', emoji: '💹', desc: '産業・AI・エネルギー・観光・地方経済', themeIds: ['ai-gyosei', 'energy', 'kanko', 'chiho-zaisei'] },
+  { id: 'next', no: 3, title: '次世代を育てる国', emoji: '🎒', desc: '教育・子育て・若者支援・少子化対策', themeIds: ['kosodate'] },
+  { id: 'clean', no: 4, title: '透明で信頼できる国', emoji: '🔍', desc: '政治資金・入札・行政・議会活動の透明化', themeIds: ['nyusatsu', 'ai-gyosei'] },
+  { id: 'freedom', no: 5, title: '自由と責任が両立する国', emoji: '⚖️', desc: '個人の挑戦・地域自治・財政規律・社会保障', themeIds: ['chiho-zaisei'] },
+  { id: 'world', no: 6, title: '世界から信頼される国', emoji: '🕊️', desc: '人権外交・安全保障・国際競争力', themeIds: ['jinken'] },
+]
+
+// 日本の未来KPI
+export interface NationalKPI {
+  id: string
+  category: string
+  name: string
+  current: string
+  target: string
+  themeId: string
+}
+
+export const NATIONAL_KPIS: NationalKPI[] = [
+  { id: 'k1', category: '防災', name: '災害関連死', current: '集計中', target: '10年で半減', themeId: 'bosai' },
+  { id: 'k2', category: '交通', name: '交通事故死者数', current: '集計中', target: '10年で半減', themeId: 'kotsu' },
+  { id: 'k3', category: '教育', name: '子どもの学力・非認知能力', current: '集計中', target: 'OECD上位', themeId: 'kosodate' },
+  { id: 'k4', category: '少子化', name: '合計特殊出生率', current: '集計中', target: '反転', themeId: 'kosodate' },
+  { id: 'k5', category: '財政', name: '国・地方債務残高GDP比', current: '集計中', target: '安定化', themeId: 'chiho-zaisei' },
+  { id: 'k6', category: '行政', name: '行政手続オンライン完結率', current: '集計中', target: '90%以上', themeId: 'ai-gyosei' },
+  { id: 'k7', category: '政治', name: '政治資金公開の即時性', current: '年次中心', target: '月次・リアルタイム化', themeId: 'nyusatsu' },
+  { id: 'k8', category: '地方', name: '自治体DX成熟度', current: '集計中', target: '全自治体標準化', themeId: 'ai-gyosei' },
+  { id: 'k9', category: '経済', name: '1人あたりGDP', current: '集計中', target: 'G7上位回復', themeId: 'kanko' },
+  { id: 'k10', category: 'エネルギー', name: 'エネルギー自給率', current: '集計中', target: '改善', themeId: 'energy' },
+]
+
+// 世界と比べる日本（△○◎×）
+export const COMPARE_COUNTRIES = ['日本', '台湾', 'シンガポール', 'エストニア', '米国', '北欧'] as const
+export interface CountryRow {
+  theme: string
+  ratings: Record<string, '◎' | '○' | '△' | '×'>
+  learn: string // 日本が真似るべき
+}
+export const COUNTRY_COMPARISON: CountryRow[] = [
+  { theme: '行政DX', ratings: { 日本: '△', 台湾: '○', シンガポール: '◎', エストニア: '◎', 米国: '○', 北欧: '○' }, learn: 'エストニア型の電子政府・一度きり原則' },
+  { theme: '政治参加DX', ratings: { 日本: '△', 台湾: '◎', シンガポール: '○', エストニア: '○', 米国: '○', 北欧: '○' }, learn: '台湾型のデジタル民主主義（vTaiwan）' },
+  { theme: '防災', ratings: { 日本: '○', 台湾: '○', シンガポール: '△', エストニア: '△', 米国: '○', 北欧: '○' }, learn: '日本の強み。輸出も視野' },
+  { theme: '教育', ratings: { 日本: '○', 台湾: '○', シンガポール: '◎', エストニア: '○', 米国: '○', 北欧: '◎' }, learn: '北欧型の非認知能力・探究学習' },
+  { theme: '政治資金透明化', ratings: { 日本: '△', 台湾: '○', シンガポール: '○', エストニア: '○', 米国: '△', 北欧: '○' }, learn: '北欧・台湾型のオープンデータ公開' },
+  { theme: 'AI行政活用', ratings: { 日本: '△', 台湾: '○', シンガポール: '◎', エストニア: '◎', 米国: '○', 北欧: '○' }, learn: 'シンガポール型のAI行政サービス' },
+]

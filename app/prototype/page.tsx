@@ -2,6 +2,30 @@ import Link from 'next/link'
 
 const PROTOTYPES = [
   {
+    href: '/prototype/vision',
+    title: '日本のあるべき姿（国家ビジョン）',
+    status: '作業中',
+    description:
+      '政策・候補者を選ぶ前に「どんな日本をめざすか」を示す国家ビジョン（6本柱）。超党派で評価できる軸として提示し、政策テーマ・KPIに接続。',
+    notes: ['6本柱（命を守る/稼げる/次世代/透明/自由と責任/世界信頼）', '各柱から関連政策へ遷移。KPI・他国比較へも導線'],
+  },
+  {
+    href: '/prototype/kpi',
+    title: '日本の未来KPI',
+    status: '作業中',
+    description:
+      'ビジョンを分野別KPI（現状→目標）に落とし込み、政策と紐づける。候補者が目標を掲げているかを見る軸。',
+    notes: ['10分野のKPI（目標方向・年限）', '各KPIから関連政策へ。本番は政府統計に接続'],
+  },
+  {
+    href: '/prototype/compare-countries',
+    title: '世界と比べる日本',
+    status: '作業中',
+    description:
+      '分野別に各国（日本/台湾/星/愛沙尼亜/米/北欧）を比較。海外礼賛でなく「真似るべき／日本独自に進めるべき」を見極める。',
+    notes: ['◎○△× の分野別比較表', '日本が参考にできる制度。本番は候補者がどの国モデルに近いかも'],
+  },
+  {
     href: '/prototype/match',
     title: '政策マッチング診断',
     status: '作業中',

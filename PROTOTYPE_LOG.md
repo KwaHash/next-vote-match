@@ -47,3 +47,9 @@
 - 候補者 個別詳細 `/prototype/candidates/[id]`: 公約/実績/政治資金透明化/SNS/一致率。候補者一覧のカードから遷移。
 - 候補者比較 `/prototype/compare`: 最大3名を並べて政党/種別/地域/一致率/透明化/政策を比較。
 - 政策別寄付ページ: 寄付確定時に proto_donations_v1 へ記録（寄付レポート連動）。
+
+## 国家ビジョン軸（2026-06-20 追加）
+- 日本のあるべき姿 `/prototype/vision`: 国家ビジョン6本柱→政策テーマ・KPI・他国比較へ接続。
+- 日本の未来KPI `/prototype/kpi`: 10分野のKPI（現状→目標）と政策の紐づけ。本番は政府統計に接続。
+- 世界と比べる日本 `/prototype/compare-countries`: 分野別の各国比較（◎○△×）＋日本が参考にできる制度。
+- 政策投票: 政策詳細 `/prototype/policies/[id]` に賛否・優先度・支援意思の投票＋「懸念の可視化」を追加（policy_votes）。

@@ -23,6 +23,14 @@ type AllocMode = 'auto' | 'region'
 const ONCE_PRESETS = [1000, 3000, 5000, 10000]
 const MONTHLY_PRESETS = [500, 1000, 3000, 10000]
 
+// 政策投票（賛否・優先度・支援意思）
+const STANCE_OPTS = ['賛成', 'どちらかといえば賛成', '中立', 'どちらかといえば反対', '反対']
+const PRIORITY_OPTS = ['今すぐ進めるべき', '1〜3年以内', '中長期でよい', '優先度は低い']
+const SUPPORT_OPTS = ['寄付したい', 'SNSで広めたい', '勉強会に参加したい', '意見だけ送りたい']
+// 集計サンプル（本番は policy_votes 集計）
+const SAMPLE_RESULT = { agree: 68, neutral: 20, disagree: 12 }
+const SAMPLE_CONCERNS = ['財源が不明', '実施主体が不明', '地方自治体の負担が大きい']
+
 export default function PolicyDetailPage() {
   const params = useParams()
   const id = String(params?.id ?? '')
@@ -33,6 +41,10 @@ export default function PolicyDetailPage() {
   const [allocMode, setAllocMode] = useState<AllocMode>('auto')
   const [region, setRegion] = useState('')
   const [donationId, setDonationId] = useState<string | null>(null)
+  const [stance, setStance] = useState('')
+  const [priority, setPriority] = useState('')
+  const [supportWish, setSupportWish] = useState<string[]>([])
+  const [voted, setVoted] = useState(false)
 
   if (!theme) {
     return (
@@ -131,6 +143,64 @@ export default function PolicyDetailPage() {
           </div>
         </div>
       )}
+
+      {/* 政策投票 */}
+      <div className='mt-6 rounded-2xl border border-gray-200 bg-white p-6'>
+        <h2 className='mb-1 text-base font-bold text-gray-900'>この政策に投票する</h2>
+        <p className='mb-4 text-xs text-gray-400'>結果は人気投票ではなく、政策を良くするための声として集計します。</p>
+
+        {voted ? (
+          <div>
+            <div className='mb-3 rounded-xl bg-blue-50 p-4'>
+              <p className='mb-2 text-sm font-semibold text-blue-800'>この政策への反応</p>
+              {[['賛成', SAMPLE_RESULT.agree, 'bg-emerald-500'], ['中立', SAMPLE_RESULT.neutral, 'bg-gray-400'], ['反対', SAMPLE_RESULT.disagree, 'bg-rose-500']].map(([label, v, color]) => (
+                <div key={label as string} className='mb-1.5'>
+                  <div className='flex justify-between text-xs text-gray-600'><span>{label}</span><span>{v}%</span></div>
+                  <div className='h-1.5 w-full overflow-hidden rounded-full bg-white'><div className={`h-full ${color}`} style={{ width: `${v}%` }} /></div>
+                </div>
+              ))}
+            </div>
+            <div className='rounded-xl bg-amber-50 p-4'>
+              <p className='mb-1.5 text-sm font-semibold text-amber-800'>多い懸念</p>
+              <ol className='list-inside list-decimal space-y-0.5 text-xs text-amber-700'>
+                {SAMPLE_CONCERNS.map((c) => (<li key={c}>{c}</li>))}
+              </ol>
+            </div>
+            <p className='mt-3 text-center text-xs text-emerald-600'>投票ありがとうございました（プロト）</p>
+            <button onClick={() => setVoted(false)} className='mt-1 w-full text-center text-xs text-gray-400 hover:text-gray-600'>やり直す</button>
+          </div>
+        ) : (
+          <div className='space-y-4'>
+            <div>
+              <p className='mb-2 text-sm font-medium text-gray-700'>この政策をどう思いますか？</p>
+              <div className='flex flex-wrap gap-2'>
+                {STANCE_OPTS.map((o) => (
+                  <button key={o} onClick={() => setStance(o)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${stance === o ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{o}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className='mb-2 text-sm font-medium text-gray-700'>優先度は？</p>
+              <div className='flex flex-wrap gap-2'>
+                {PRIORITY_OPTS.map((o) => (
+                  <button key={o} onClick={() => setPriority(o)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${priority === o ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{o}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className='mb-2 text-sm font-medium text-gray-700'>支援できますか？（複数可）</p>
+              <div className='flex flex-wrap gap-2'>
+                {SUPPORT_OPTS.map((o) => (
+                  <button key={o} onClick={() => setSupportWish((p) => p.includes(o) ? p.filter((x) => x !== o) : [...p, o])} className={`rounded-full px-3 py-1.5 text-xs font-medium ${supportWish.includes(o) ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{o}</button>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => setVoted(true)} disabled={!stance} className='w-full rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300'>
+              投票する
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* 寄付 */}
       <div className='mt-6 rounded-2xl border border-blue-200 bg-blue-50/40 p-6'>
