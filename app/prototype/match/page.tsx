@@ -11,6 +11,7 @@
  */
 
 import { POLICY_THEMES } from '../_data'
+import { saveJSON } from '../_store'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -74,11 +75,7 @@ export default function CitizenMatchPage() {
   // 結果に到達したら保存（候補者一覧の一致率算出に使う）
   useEffect(() => {
     if (step !== 'result') return
-    try {
-      localStorage.setItem(MATCH_RESULT_KEY, JSON.stringify({ weights: scores, savedAt: new Date().toISOString() }))
-    } catch {
-      /* ignore */
-    }
+    saveJSON(MATCH_RESULT_KEY, { weights: scores, savedAt: new Date().toISOString() })
   }, [step, scores])
 
   const restart = () => {

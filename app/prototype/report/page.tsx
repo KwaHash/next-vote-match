@@ -10,6 +10,7 @@
  *   使用状況・成果はサンプル。本番は donations→allocations→expenses→impacts を紐づけて表示。
  */
 
+import { STORE_KEYS, loadJSON } from '../_store'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -39,16 +40,10 @@ export default function DonationReportPage() {
   const [isSample, setIsSample] = useState(false)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('proto_donations_v1')
-      const arr: Donation[] = raw ? JSON.parse(raw) : []
-      if (arr.length > 0) {
-        setDonations(arr)
-      } else {
-        setDonations(SAMPLE)
-        setIsSample(true)
-      }
-    } catch {
+    const arr = loadJSON<Donation[]>(STORE_KEYS.donations, [])
+    if (arr.length > 0) {
+      setDonations(arr)
+    } else {
       setDonations(SAMPLE)
       setIsSample(true)
     }

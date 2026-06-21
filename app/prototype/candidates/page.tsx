@@ -13,6 +13,7 @@
  */
 
 import { ELECTION_TYPES, POLICY_THEMES, SAMPLE_CANDIDATES, type PrototypeCandidate } from '../_data'
+import { loadJSON } from '../_store'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -36,12 +37,8 @@ export default function CitizenCandidatesPage() {
   const [status, setStatus] = useState('all')
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(MATCH_RESULT_KEY)
-      if (raw) setWeights(JSON.parse(raw).weights ?? null)
-    } catch {
-      /* ignore */
-    }
+    const d = loadJSON<{ weights?: Record<string, number> } | null>(MATCH_RESULT_KEY, null)
+    if (d) setWeights(d.weights ?? null)
   }, [])
 
   const matchPct = (c: PrototypeCandidate): number | null => {

@@ -59,3 +59,8 @@
   - 軸1 政策の重点（診断との関心一致）/ 軸2 実行力・現実性（財源◎○△＋実績）/ 軸3 透明性・信頼（情報公開姿勢）
   - CSV列: 氏名,所属,年齢,立場,重点政策(/区切り),財源(明確/一部/不明),透明性(高/中/低),実績
   - 本番: 管理画面でCSV→DB取込（elections / candidacies）。重点政策はテーマ名を政策一覧と揃えると一致が出る。
+
+## 本番化の下準備（2026-06-20）
+- `app/prototype/_store.ts` を追加し、全画面の保存（診断結果/寄付/選挙CSV）を loadJSON/saveJSON に集約。
+- 本番（Supabase）化は **_store.ts の中身だけ差し替え**れば全画面が繋がる（呼び出し側は変更不要）。
+- key→テーブル対応: proto_citizen_match_v1→診断, proto_donations_v1→donations, proto_election_v1→election_candidates。

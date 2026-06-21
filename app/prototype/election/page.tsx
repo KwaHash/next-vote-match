@@ -11,6 +11,7 @@
  */
 
 import { POLICY_THEMES } from '../_data'
+import { loadJSON, saveJSON } from '../_store'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -62,16 +63,14 @@ export default function ElectionPage() {
   const [weights, setWeights] = useState<Record<string, number> | null>(null)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) { const d = JSON.parse(raw); setElectionName(d.electionName ?? '杉並区長選挙'); setCands(d.cands ?? []) }
-      const m = localStorage.getItem(MATCH_RESULT_KEY)
-      if (m) setWeights(JSON.parse(m).weights ?? null)
-    } catch { /* ignore */ }
+    const d = loadJSON<{ electionName?: string; cands?: Cand[] } | null>(STORAGE_KEY, null)
+    if (d) { setElectionName(d.electionName ?? '杉並区長選挙'); setCands(d.cands ?? []) }
+    const m = loadJSON<{ weights?: Record<string, number> } | null>(MATCH_RESULT_KEY, null)
+    if (m) setWeights(m.weights ?? null)
   }, [])
 
   const persist = (name: string, list: Cand[]) => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ electionName: name, cands: list })) } catch { /* ignore */ }
+    saveJSON(STORAGE_KEY, { electionName: name, cands: list })
   }
 
   const importCSV = (text: string) => {
