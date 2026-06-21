@@ -30,6 +30,8 @@ const SUPPORT_OPTS = ['寄付したい', 'SNSで広めたい', '勉強会に参�
 // 集計サンプル（本番は policy_votes 集計）
 const SAMPLE_RESULT = { agree: 68, neutral: 20, disagree: 12 }
 const SAMPLE_CONCERNS = ['財源が不明', '実施主体が不明', '地方自治体の負担が大きい']
+// 応援する方法（支援導線。お金以外も含め、表明すると assist マイページに反映される想定）
+const SUPPORT_METHODS = ['寄付する', 'SNSで広める', '勉強会に参加する', '友人に紹介する', '会場を貸せる', '動画編集を手伝える', 'チラシ配布を手伝える']
 
 export default function PolicyDetailPage() {
   const params = useParams()
@@ -45,6 +47,8 @@ export default function PolicyDetailPage() {
   const [priority, setPriority] = useState('')
   const [supportWish, setSupportWish] = useState<string[]>([])
   const [voted, setVoted] = useState(false)
+  const [methods, setMethods] = useState<string[]>([])
+  const [methodsDone, setMethodsDone] = useState(false)
 
   if (!theme) {
     return (
@@ -199,6 +203,32 @@ export default function PolicyDetailPage() {
               投票する
             </button>
           </div>
+        )}
+      </div>
+
+      {/* 応援する方法（支援導線→assist） */}
+      <div className='mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6'>
+        <h2 className='mb-1 text-base font-bold text-gray-900'>この政策を応援する方法</h2>
+        <p className='mb-4 text-xs text-gray-500'>お金以外でも応援できます。選んで表明すると、支援マイページ（assist）に反映されます。</p>
+        {methodsDone ? (
+          <div className='rounded-xl bg-white p-4 text-center'>
+            <div className='text-2xl'>🤝</div>
+            <p className='mt-1 text-sm font-semibold text-emerald-800'>{methods.length}件の応援を表明しました（プロト）</p>
+            <p className='mt-1 text-xs text-gray-500'>support.seijiselect.jp の「今できる支援」に追加されました。</p>
+            <a href='https://hiromitsu.tail612ce7.ts.net:8444/prototype/dashboard' target='_blank' rel='noopener noreferrer' className='mt-2 inline-block text-xs font-semibold text-emerald-600 underline'>支援ダッシュボードを見る →</a>
+            <button onClick={() => { setMethodsDone(false); setMethods([]) }} className='mt-2 block w-full text-center text-xs text-gray-400 hover:text-gray-600'>やり直す</button>
+          </div>
+        ) : (
+          <>
+            <div className='flex flex-wrap gap-2'>
+              {SUPPORT_METHODS.map((m) => (
+                <button key={m} onClick={() => setMethods((p) => p.includes(m) ? p.filter((x) => x !== m) : [...p, m])} className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${methods.includes(m) ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50'}`}>{m}</button>
+              ))}
+            </div>
+            <button onClick={() => setMethodsDone(true)} disabled={methods.length === 0} className='mt-4 w-full rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300'>
+              応援を表明する
+            </button>
+          </>
         )}
       </div>
 
