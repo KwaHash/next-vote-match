@@ -28,6 +28,8 @@ export default function CitizenMatchPage() {
   const [step, setStep] = useState<Step>('intro')
   const [idx, setIdx] = useState(0)
   const [scores, setScores] = useState<Record<string, number>>({})
+  const [shareOpen, setShareOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const total = POLICY_THEMES.length
   const current = POLICY_THEMES[idx]
@@ -53,6 +55,21 @@ export default function CitizenMatchPage() {
   )
   const top = ranked.filter((r) => r.weight > 0).slice(0, 3)
   const topTheme = top[0]?.theme
+
+  const shareText = topTheme
+    ? `私は${topTheme.animal}タイプ｜今回は「${topTheme.name}」で選ぶ派！ 政策マッチング診断 #seijiselect`
+    : '政策マッチング診断 #seijiselect'
+  const shareUrl = 'https://seijiselect.jp/match'
+  const doShare = async () => {
+    const navAny = typeof navigator !== 'undefined' ? (navigator as Navigator & { share?: (d: { text: string; url: string }) => Promise<void> }) : null
+    if (navAny?.share) {
+      try { await navAny.share({ text: shareText, url: shareUrl }); return } catch { /* fallthrough */ }
+    }
+    setShareOpen(true)
+  }
+  const copyShare = async () => {
+    try { await navigator.clipboard.writeText(`${shareText} ${shareUrl}`); setCopied(true) } catch { /* ignore */ }
+  }
 
   // 結果に到達したら保存（候補者一覧の一致率算出に使う）
   useEffect(() => {
@@ -174,11 +191,20 @@ export default function CitizenMatchPage() {
           </div>
         )}
         <div className='grid grid-cols-2 gap-3'>
-          <button className='rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700'>結果をシェア</button>
+          <button onClick={doShare} className='rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700'>結果をシェア</button>
           <Link href='/prototype/candidates' className='rounded-xl border border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50'>
             近い候補者を見る
           </Link>
         </div>
+
+        {/* シェア先（Web Share 非対応時の選択肢） */}
+        {shareOpen && (
+          <div className='mt-3 grid grid-cols-3 gap-2 rounded-xl border border-gray-200 bg-gray-50 p-3'>
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`} target='_blank' rel='noopener noreferrer' className='rounded-lg bg-black px-3 py-2 text-center text-xs font-semibold text-white'>X でシェア</a>
+            <a href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}`} target='_blank' rel='noopener noreferrer' className='rounded-lg bg-[#06C755] px-3 py-2 text-center text-xs font-semibold text-white'>LINE</a>
+            <button onClick={copyShare} className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-700'>{copied ? 'コピー済' : 'コピー'}</button>
+          </div>
+        )}
         <button onClick={restart} className='mt-3 w-full text-center text-xs text-gray-400 hover:text-gray-600'>もう一度診断する</button>
         <p className='mt-3 text-center text-xs text-gray-400'>※ 診断は参考情報です。投票判断はご自身で。</p>
       </div>
