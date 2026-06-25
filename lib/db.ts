@@ -106,6 +106,18 @@ async function initializeDatabase(db: Connection) {
     )
   `)
 
+  // AI レスポンスキャッシュ（同一質問は AI を呼ばずに返す）
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS ai_response_cache (
+      question_hash VARCHAR(64) NOT NULL PRIMARY KEY,
+      question_text TEXT NOT NULL,
+      response_text LONGTEXT NOT NULL,
+      hit_count INT NOT NULL DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
+  `)
+
   await db.execute(`
     CREATE TABLE IF NOT EXISTS resources (
       id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,

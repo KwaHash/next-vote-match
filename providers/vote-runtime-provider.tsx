@@ -1,13 +1,26 @@
 'use client'
 
-import { AssistantRuntimeProvider, Suggestions, useAui, useLocalRuntime, type ChatModelAdapter, type ChatModelRunResult } from '@assistant-ui/react'
+import { AI_FAQ_CATEGORIES } from '@/constants/ai-faq'
+import {
+  AssistantRuntimeProvider,
+  Suggestions,
+  useAui,
+  useLocalRuntime,
+  type ChatModelAdapter,
+  type ChatModelRunResult,
+} from '@assistant-ui/react'
 import type { ReactNode } from 'react'
 
 function toApiMessage(message: { role: string; content: unknown }) {
   const content = message.content
   return {
     role: message.role,
-    content: typeof content === 'string' ? content : Array.isArray(content) ? content.map((part: { text?: string }) => part.text ?? '').join('\n') : '',
+    content:
+      typeof content === 'string'
+        ? content
+        : Array.isArray(content)
+        ? content.map((part: { text?: string }) => part.text ?? '').join('\n')
+        : '',
   }
 }
 
@@ -16,15 +29,13 @@ const VoteRuntimeModelAdapter: ChatModelAdapter = {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: messages.map(toApiMessage),
-      }),
+      body: JSON.stringify({ messages: messages.map(toApiMessage) }),
       signal: abortSignal,
     })
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}))
-      throw new Error(err.error ?? `Chat request failed (${res.status})`)
+      throw new Error(err.error ?? `チャットリクエストに失敗しました (${res.status})`)
     }
 
     const reader = res.body?.getReader()
@@ -44,11 +55,9 @@ const VoteRuntimeModelAdapter: ChatModelAdapter = {
         if (!trimmed) continue
         try {
           const payload = JSON.parse(trimmed) as { content: ChatModelRunResult['content'] }
-          if (payload.content) {
-            yield { content: payload.content } as ChatModelRunResult
-          }
+          if (payload.content) yield { content: payload.content } as ChatModelRunResult
         } catch {
-          // skip malformed lines
+          // malformed line を無視
         }
       }
     }
@@ -56,39 +65,29 @@ const VoteRuntimeModelAdapter: ChatModelAdapter = {
       try {
         const payload = JSON.parse(buffer.trim()) as { content: ChatModelRunResult['content'] }
         if (payload.content) yield { content: payload.content } as ChatModelRunResult
-      } catch {
-        // skip
-      }
+      } catch {}
     }
   },
 }
+
+/**
+ * サジェスト一覧を AI_FAQ_CATEGORIES から生成。
+ * 各カテゴリの最初の質問のみ表示（表示枠が狭いため）。
+ * 詳細なFAQ一覧は /ai-chat ページの FaqPanel コンポーネントで表示。
+ */
+const QUICK_SUGGESTIONS = AI_FAQ_CATEGORIES.flatMap((cat) =>
+  cat.questions.slice(0, 2).map((q) => ({
+    title: cat.name,
+    label: `${cat.emoji} ${q.label}`,
+    prompt: q.prompt,
+  }))
+)
 
 export function VoteRuntimeProvider({ children }: Readonly<{ children: ReactNode }>) {
   const runtime = useLocalRuntime(VoteRuntimeModelAdapter)
 
   const aui = useAui({
-    suggestions: Suggestions([
-      {
-        title: '投票方法',
-        label: '投票の流れ',
-        prompt: '日本の選挙での投票方法と当日の流れを教えてください。',
-      },
-      {
-        title: '期日前投票',
-        label: '期日前投票とは',
-        prompt: '期日前投票はどのような仕組みで、どこでできますか？',
-      },
-      {
-        title: '選挙制度',
-        label: '日本の選挙の仕組み',
-        prompt: '日本の選挙制度の基本的な仕組みについて教えてください。',
-      },
-      {
-        title: '投票率',
-        label: '投票率を上げるには',
-        prompt: '日本で投票率を上げるためにはどのような取り組みが有効ですか？',
-      },
-    ]),
+    suggestions: Suggestions(QUICK_SUGGESTIONS),
   })
 
   return (

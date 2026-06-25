@@ -2,6 +2,46 @@ import Link from 'next/link'
 
 const PROTOTYPES = [
   {
+    href: '/prototype/prefecture-kpi',
+    title: '都道府県別 課題・KPI',
+    status: '作業中',
+    description:
+      '都道府県ごとの政治課題・目標KPIを可視化。有権者が「自分の地域の課題」を知れるSEOコンテンツ。政策ランキング・候補者への導線になる。',
+    notes: ['47都道府県セレクタ + 課題リスト + KPI（現状→目標・達成状況）', '関連政策テーマへのリンク。本番: 政府統計API（e-Stat）に自動接続'],
+  },
+  {
+    href: '/prototype/premium',
+    title: '候補者プレミアムプラン（マネタイズ①②）',
+    status: '作業中',
+    description:
+      '候補者向け有料プロフィール強化プラン（フリー / スタンダード¥2,980 / プレミアム¥9,800）と、政策クラウドファンディング手数料体系（3〜5%）のプロトタイプ。',
+    notes: ['プラン比較表 + モック申込フロー', 'クラファン手数料体系（寄付成立分のみ課金）。本番: Stripe + subscriptions テーブル'],
+  },
+  {
+    href: '/prototype/data-report',
+    title: 'データレポート販売（マネタイズ③）',
+    status: '作業中',
+    description:
+      '政策関心・賛否・寄付傾向データを研究機関・メディア・自治体向けにレポート販売。地域別・政策別・有権者属性別の6種類を掲載。法人向けAPI提供も想定。',
+    notes: ['レポート一覧（カテゴリ絞り込み）+ モック購入フロー', '本番: Stripe + S3署名付きURL でダウンロード提供'],
+  },
+  {
+    href: '/prototype/ranking',
+    title: '地域×政策ランキング',
+    status: '作業中',
+    description:
+      '全国・都道府県・市区町村別に「どの政策への関心が高いか」を可視化。今週のトレンドや都道府県別1位マップも表示。SEO・SNS拡散コンテンツ。',
+    notes: ['全国/都道府県/市区町村タブで切替', '政策関心ランキング + 今週のトレンド（本番: policy_votes 地域別集計）'],
+  },
+  {
+    href: '/prototype/notify',
+    title: '選挙前通知設定',
+    status: '作業中',
+    description:
+      '投票日が近づいたらメール / LINE / プッシュ通知でリマインドする設定画面。「忘れて投票に行けなかった」を防ぐリテンション機能。',
+    notes: ['通知チャネル（メール/LINE/プッシュ）・対象選挙・タイミング・地域を設定', 'LINE友だち追加 / ブラウザ通知許可フロー（本番: notifications テーブル + 配信API）'],
+  },
+  {
     href: '/prototype/vision',
     title: '日本のあるべき姿（国家ビジョン）',
     status: '作業中',
