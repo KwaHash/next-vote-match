@@ -27,6 +27,7 @@ export const STORE_KEYS = {
   citizenMatch: 'proto_citizen_match_v1',
   donations: 'proto_donations_v1',
   election: 'proto_election_v1',
+  recurringSupport: 'proto_recurring_support_v1', // → subscriptions（定期支援の登録）
 } as const
 
 /** 読み込み。データが無い/壊れている場合は fallback を返す。 */

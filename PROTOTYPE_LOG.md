@@ -64,3 +64,7 @@
 - `app/prototype/_store.ts` を追加し、全画面の保存（診断結果/寄付/選挙CSV）を loadJSON/saveJSON に集約。
 - 本番（Supabase）化は **_store.ts の中身だけ差し替え**れば全画面が繋がる（呼び出し側は変更不要）。
 - key→テーブル対応: proto_citizen_match_v1→診断, proto_donations_v1→donations, proto_election_v1→election_candidates。
+
+## 月額で応援する（定期支援・寄付者視点）（2026-06-20）
+- `/prototype/recurring`: 有権者が政策を毎月の定期支援（サブスク）で応援。金額（月額）・配分・お支払い情報を選び登録→支援ID発行→一覧・解約。
+- 受け取りはプラットフォーム集約（決済代行）方式。本番はクレカ定期課金＋本人確認・政治資金規正法対応。政治家側の donation-manage と対。_store.ts に recurringSupport キー追加。
