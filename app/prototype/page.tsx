@@ -62,8 +62,12 @@ export default function PrototypeIndexPage() {
 
       {/* 中立性・法令の注意 */}
       <div className='mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-relaxed text-blue-800'>
-        <span className='font-semibold'>中立性・出どころ:</span>{' '}
-        候補者は公平に表示し、情報の出どころ（公式／本人入力／未確認）を明示します。寄付・応援の決済機能は、本人確認・法務確認（政治資金規正法・公職選挙法等）後に提供します。
+        <p><span className='font-semibold'>中立性・出どころ:</span>{' '}
+        候補者は公平に表示し、情報の出どころ（公式／本人入力／未確認）を明示します。比較は参考情報で、特定候補者への投票を推奨するものではありません。</p>
+        <p className='mt-2'><span className='font-semibold'>寄付・選挙運動の注意:</span>{' '}
+        寄付・応援の決済機能は本人確認・法務確認（政治資金規正法・公職選挙法等）後に提供します。
+        <span className='font-semibold'>外国人・外国法人からの寄付、匿名寄付は禁止</span>です。
+        また<span className='font-semibold'>有権者による電子メールでの選挙運動は禁止</span>のため、投票日リマインダーは中立的な情報通知に限定し、投票依頼は含めません。</p>
       </div>
 
       {/* 5メニュー */}
