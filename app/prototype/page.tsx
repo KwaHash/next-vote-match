@@ -17,8 +17,8 @@ const MENU: Menu[] = [
   },
   {
     n: 3, icon: '🗳️', title: '候補者を探す', lead: '地域・選挙種別・一致率で探す。', items: [
+      { name: '選挙で選ぶ（〒検索）', href: '/prototype/elections', note: '郵便番号→実施中の選挙→その選挙の候補者を比較・マッチング' },
       { name: '候補者一覧・検索', href: '/prototype/candidates', note: '個別選挙の候補者一覧を統合。出どころ（公式/本人/未確認）を明示' },
-      { name: '候補者比較（最大3名）', href: '/prototype/compare', note: '政策一致度／実行力・現実性／透明性・信頼 の3軸' },
     ],
   },
   {
@@ -41,6 +41,7 @@ const DEFERRED: Item[] = [
   { name: '月額で応援する', href: '/prototype/recurring', note: '後回し：献金・決済・法令対応が必要なため第2段階' },
   { name: 'あなたの寄付レポート', href: '/prototype/report', note: '後回し：寄付開始後にログイン後マイページで' },
   { name: '世界と比べる日本', href: '/prototype/compare-countries', note: '後回し：将来SEO記事・特集として' },
+  { name: '候補者比較（旧・任意3名）', href: '/prototype/compare', note: '削除：「選挙で選ぶ」の選挙内比較に統合' },
   { name: '●●選挙 候補者CSV（取込デモ）', href: '/prototype/election', note: '取込・管理は運営admin側へ。国民側は表示のみ' },
 ]
 

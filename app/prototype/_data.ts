@@ -144,3 +144,46 @@ export const COUNTRY_COMPARISON: CountryRow[] = [
   { theme: '政治資金透明化', ratings: { 日本: '△', 台湾: '○', シンガポール: '○', エストニア: '○', 米国: '△', 北欧: '○' }, learn: '北欧・台湾型のオープンデータ公開' },
   { theme: 'AI行政活用', ratings: { 日本: '△', 台湾: '○', シンガポール: '◎', エストニア: '◎', 米国: '○', 北欧: '○' }, learn: 'シンガポール型のAI行政サービス' },
 ]
+
+// ===== 実施中の選挙（〒で選ぶ → 候補者比較・マッチング）追加 2026-06-20 =====
+export interface ElectionCand {
+  name: string
+  party: string
+  age: string
+  status: string // 現職/新人/元職
+  themes: string[] // 重点政策テーマ id
+  finance: string // 明確/一部/不明
+  transparency: string // 高/中/低
+  achievement: string
+}
+export interface OngoingElection {
+  id: string
+  name: string
+  typeLabel: string
+  region: string
+  postalPrefixes: string[] // 郵便番号の先頭一致（プロト簡易判定）
+  date: string
+  cands: ElectionCand[]
+}
+
+export const ONGOING_ELECTIONS: OngoingElection[] = [
+  {
+    id: 'suginami-chiji', name: '杉並区長選挙', typeLabel: '市区町村長', region: '東京都杉並区',
+    postalPrefixes: ['166', '167', '168'], date: '2026-07-05',
+    cands: [
+      { name: '区民 一郎', party: '無所属', age: '58', status: '現職', themes: ['bosai', 'kosodate'], finance: '明確', transparency: '高', achievement: '区議3期・防災予算化' },
+      { name: '杉並 花子', party: '中道改革', age: '46', status: '新人', themes: ['kosodate', 'ai-gyosei'], finance: '一部', transparency: '中', achievement: 'NPO代表・待機児童ゼロ運動' },
+      { name: '高円寺 健', party: '無所属', age: '51', status: '新人', themes: ['nyusatsu', 'chiho-zaisei'], finance: '明確', transparency: '高', achievement: '公認会計士・行財政改革を提言' },
+      { name: '阿佐ヶ谷 みどり', party: 'れいわ新選', age: '39', status: '新人', themes: ['jinken', 'kosodate'], finance: '不明', transparency: '中', achievement: '市民活動家・子ども食堂運営' },
+    ],
+  },
+  {
+    id: 'osaka-chiji', name: '大阪府知事選挙', typeLabel: '都道府県知事', region: '大阪府',
+    postalPrefixes: ['53', '54', '55', '56', '57', '58', '59'], date: '2026-08-02',
+    cands: [
+      { name: '伊藤 さやか', party: '日本維新', age: '47', status: '新人', themes: ['ai-gyosei', 'chiho-zaisei'], finance: '一部', transparency: '中', achievement: '府議2期' },
+      { name: '森本 太一', party: '無所属', age: '55', status: '現職', themes: ['energy', 'kanko'], finance: '明確', transparency: '高', achievement: '前市長・観光振興に実績' },
+      { name: '大阪 直子', party: '国民民主党', age: '42', status: '新人', themes: ['kosodate', 'nyusatsu'], finance: '明確', transparency: '高', achievement: '弁護士・行政監視' },
+    ],
+  },
+]
