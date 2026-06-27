@@ -153,8 +153,9 @@ export interface ElectionCand {
   status: string // 現職/新人/元職
   themes: string[] // 重点政策テーマ id
   finance: string // 明確/一部/不明
-  transparency: string // 高/中/低
+  transparency: string // 高/中/低/未確認
   achievement: string
+  source?: string // データ出どころ（本人入力/公式情報/選挙公報/公開情報/未確認 等）
 }
 export interface OngoingElection {
   id: string
