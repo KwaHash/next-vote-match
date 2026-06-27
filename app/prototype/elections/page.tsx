@@ -20,11 +20,32 @@ const finRating = (f: string) => (f.includes('明確') ? '◎' : f.includes('一
 const transRating = (t: string) => (t.includes('高') ? '◎' : t.includes('中') ? '○' : '△')
 const ratingColor = (r: string) => (r === '◎' ? 'text-emerald-600 font-bold' : r === '○' ? 'text-blue-600' : 'text-amber-600')
 
+// AIで切り口を変えて比べる（※その都度AIを呼ばない＝事前定義のルールで「AIっぽく」表示。万単位の利用でも高速・低コスト）
+interface Angle { id: string; label: string; icon: string; lead: string; themes: string[]; useFinance?: boolean; useTransparency?: boolean; useStatus?: boolean }
+const ANGLES: Angle[] = [
+  { id: 'kurashi', label: 'くらし・子育て目線', icon: '🏠', lead: '毎日のくらし・子育ての安心で選ぶなら', themes: ['kosodate', 'nettyusho', 'kotsu'] },
+  { id: 'bosai', label: '防災・安全目線', icon: '🛟', lead: '災害や事故から命を守る視点で選ぶなら', themes: ['bosai', 'kotsu', 'nettyusho'] },
+  { id: 'money', label: 'お金・財源目線', icon: '💴', lead: '税金の使い方・財源の堅実さで選ぶなら', themes: ['chiho-zaisei', 'nyusatsu'], useFinance: true },
+  { id: 'jikko', label: '実行力・実績目線', icon: '💪', lead: '「言うだけでなくやれるか」で選ぶなら', themes: [], useStatus: true, useFinance: true },
+  { id: 'clean', label: '透明性・信頼目線', icon: '🔍', lead: '情報公開・信頼できるかで選ぶなら', themes: ['nyusatsu'], useTransparency: true },
+]
+function angleScore(a: Angle, c: { themes: string[]; finance: string; transparency: string; status: string; achievement: string }) {
+  let score = 0; const reasons: string[] = []
+  const matched = c.themes.filter((t) => a.themes.includes(t))
+  if (matched.length) { score += matched.length * 2; reasons.push(`${matched.map(themeName).join('・')}を重視`) }
+  if (a.useFinance) { const fr = finRating(c.finance); score += fr === '◎' ? 2 : fr === '○' ? 1 : 0; if (fr !== '△') reasons.push(`財源の説明が${c.finance}`) }
+  if (a.useTransparency) { const tr = transRating(c.transparency); score += tr === '◎' ? 2 : tr === '○' ? 1 : 0; if (tr !== '△') reasons.push(`情報公開が${c.transparency}`) }
+  if (a.useStatus) { if (c.status === '現職') { score += 2; reasons.push('現職で実績あり') } if (c.achievement) reasons.push(c.achievement) }
+  return { score, reasons }
+}
+
 export default function ElectionsPage() {
   const [postal, setPostal] = useState('')
   const [searched, setSearched] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [weights, setWeights] = useState<Record<string, number> | null>(null)
+  const [angle, setAngle] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     const d = loadJSON<{ weights?: Record<string, number> } | null>(STORE_KEYS.citizenMatch, null)
@@ -117,7 +138,43 @@ export default function ElectionsPage() {
             </tbody>
           </table>
         </div>
-        <p className='mt-4 text-center text-xs text-gray-400'>※ サンプルデータ。候補者情報は公式/本人入力/公開情報をもとに掲載予定（運営adminが取込・審査）。</p>
+        {/* AIで切り口を変えて比べる（事前生成・API不使用） */}
+        <div className='mt-8'>
+          <h2 className='mb-1 text-sm font-bold text-gray-900'>AIで切り口を変えて比べる</h2>
+          <p className='mb-3 text-[11px] text-gray-400'>気になる観点を選ぶと、その視点での比較を自動表示します。<strong>その都度AIを呼び出さない事前生成</strong>なので、何万人が使っても高速・低コストです。</p>
+          <div className='mb-3 flex flex-wrap gap-2'>
+            {ANGLES.map((a) => (
+              <button key={a.id} onClick={() => { setAngle(angle === a.id ? null : a.id); setCopied(false) }} className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${angle === a.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{a.icon} {a.label}</button>
+            ))}
+          </div>
+          {angle && (() => {
+            const a = ANGLES.find((x) => x.id === angle)!
+            const ranked = [...election.cands].map((c) => ({ c, ...angleScore(a, c) })).sort((x, y) => y.score - x.score)
+            const top = ranked[0]
+            const summary = `【${a.label}で比べると】\nこの観点では「${top.c.name}」さんが最も合っています。\n\n` +
+              ranked.map((r) => `・${r.c.name}（${r.c.party}）：${r.reasons.join('、') || 'この観点での強みは控えめ'}`).join('\n') +
+              `\n\n※ 参考情報です。投票判断はご自身で。`
+            return (
+              <div className='rounded-xl border border-indigo-200 bg-indigo-50/50 p-4'>
+                <div className='mb-2 flex items-center justify-between gap-2'>
+                  <span className='text-xs font-bold text-indigo-900'>🤖 {a.lead}…</span>
+                  <button onClick={async () => { try { await navigator.clipboard.writeText(summary); setCopied(true) } catch { /* ignore */ } }} className='shrink-0 rounded-lg border border-indigo-300 bg-white px-3 py-1 text-[11px] font-medium text-indigo-700 hover:bg-indigo-50'>{copied ? 'コピー済' : 'コピー'}</button>
+                </div>
+                <div className='mb-2 rounded-lg bg-white p-3 text-sm'>
+                  この観点では <span className='font-bold text-indigo-700'>{top.c.name}</span> さんが最も合っています。
+                </div>
+                <ul className='space-y-1 text-xs text-gray-700'>
+                  {ranked.map((r) => (
+                    <li key={r.c.name}><span className='font-medium'>{r.c.name}</span>（{r.c.party}）：{r.reasons.join('、') || 'この観点での強みは控えめ'}</li>
+                  ))}
+                </ul>
+                <p className='mt-2 text-[10px] text-indigo-400'>※ あらかじめ用意した観点で自動表示（生成AIをその都度呼び出していません）。参考情報です。</p>
+              </div>
+            )
+          })()}
+        </div>
+
+        <p className='mt-6 text-center text-xs text-gray-400'>※ サンプルデータ。候補者情報は公式/本人入力/公開情報をもとに掲載予定（運営adminが取込・審査）。</p>
       </div>
     )
   }
