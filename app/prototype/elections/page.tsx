@@ -39,7 +39,6 @@ const AREA_FIELDS: { key: string; name: string; themes: string[] }[] = [
   { key: 'dx', name: '行政改革・DX', themes: ['ai-gyosei', 'nyusatsu'] },
   { key: 'fukushi', name: '福祉・高齢者', themes: ['jinken', 'nettyusho'] },
 ]
-const STAGES = ['課題整理中', '公約・政策化', '実行・働きかけ中', '成果確認中']
 
 // ───── 候補者ごとの補足（重点公約・具体性・期限/KPI）。本番は運営取込データ ─────
 const CAND_EXTRA: Record<string, { pledge: string; specificity: '高' | '中' | '低'; deadline: string }> = {
@@ -53,26 +52,13 @@ const CAND_EXTRA: Record<string, { pledge: string; specificity: '高' | '中' | 
 }
 const ex = (c: ElectionCand) => CAND_EXTRA[c.name] ?? { pledge: '（公約情報は未登録）', specificity: '低' as const, deadline: '—' }
 
-interface AreaIssue { field: string; status: string; data: string; stage: number; source: string; updated: string }
 interface IncumbentReview { name: string; hasEvidence: boolean; items?: { pledge: string; result: string; source: string }[] }
-interface ElectionExtra { officialUrl: string; issues: AreaIssue[]; policyStatuses: { name: string; stage: number }[]; incumbent?: IncumbentReview }
+interface ElectionExtra { officialUrl: string; incumbent?: IncumbentReview }
 
-// ───── 選挙ごとの補足（地域課題・政策ステータス・現職レビュー）。出所がない課題は含めない＝表示しない ─────
+// ───── 選挙ごとの補足（公式リンク・現職レビュー）─────
 const ELECTION_EXTRA: Record<string, ElectionExtra> = {
   'suginami-chiji': {
     officialUrl: 'https://www.city.suginami.tokyo.jp/',
-    issues: [
-      { field: 'kosodate', status: '保育需要が増え、学童に空き待ちが残る', data: '待機児童数・学童利用率（区公表）', stage: 1, source: '杉並区 子育て支援課 公表資料', updated: '2026-06-10' },
-      { field: 'bosai', status: '木造住宅密集地域が一部に残る', data: '想定避難者数（区地域防災計画）', stage: 2, source: '杉並区 地域防災計画', updated: '2026-05-20' },
-      { field: 'zaisei', status: '扶助費の増加で財政が硬直化', data: '経常収支比率（決算カード）', stage: 0, source: '総務省 決算カード', updated: '2026-04-01' },
-      { field: 'fukushi', status: '高齢化が進み、見守り体制が課題', data: '高齢化率（住民基本台帳）', stage: 0, source: '杉並区 住民基本台帳', updated: '2026-06-01' },
-      // 行政改革・DX は出所データ未登録のため表示しない（仕様：データ出所がない課題は非表示）
-    ],
-    policyStatuses: [
-      { name: '全避難所への蓄電池・備蓄整備', stage: 2 },
-      { name: '保育士給与の区独自上乗せ', stage: 1 },
-      { name: '入札・契約の全面公開', stage: 0 },
-    ],
     incumbent: {
       name: '区民 一郎', hasEvidence: true,
       items: [
@@ -84,16 +70,6 @@ const ELECTION_EXTRA: Record<string, ElectionExtra> = {
   },
   'osaka-chiji': {
     officialUrl: 'https://www.pref.osaka.lg.jp/',
-    issues: [
-      { field: 'kosodate', status: '子育て世帯の負担感が高い', data: '保育・教育関連の府公表指標', stage: 1, source: '大阪府 福祉部 公表資料', updated: '2026-06-15' },
-      { field: 'zaisei', status: '将来の財政負担への懸念', data: '経常収支比率（決算カード）', stage: 0, source: '総務省 決算カード', updated: '2026-04-01' },
-      { field: 'dx', status: '行政手続きのデジタル化が途上', data: 'オンライン化率（府戦略）', stage: 1, source: '大阪府 スマートシティ戦略', updated: '2026-05-30' },
-      // 防災・安全 / 福祉・高齢者 は出所データ未登録のため表示しない
-    ],
-    policyStatuses: [
-      { name: '行政手続きのオンライン化', stage: 2 },
-      { name: '万博跡地の活用計画', stage: 0 },
-    ],
     incumbent: { name: '森本 太一', hasEvidence: false }, // 前回公約と根拠資料が揃わない → レビューは非表示/注記
   },
 }
@@ -109,9 +85,8 @@ function promptDeepDive(e: OngoingElection, w: Record<string, number> | null): s
 function promptQuestions(e: OngoingElection): string {
   return `${e.name} の候補者に直接聞くと判断材料になる質問を、中立的に作ってください。\n観点：①重点公約の財源 ②いつまでに何を実現するか（期限・KPI） ③これまでの実績 ④情報公開の方針 ⑤地域課題（子育て・防災・財政・行政DX・福祉）への対応。\n各観点で1〜2問、合計8問程度。特定候補に有利・不利にならない聞き方にしてください。`
 }
-function promptAreaIssues(e: OngoingElection, xt?: ElectionExtra): string {
-  const fields = (xt?.issues ?? []).map((is) => AREA_FIELDS.find((f) => f.key === is.field)?.name).filter(Boolean).join('、')
-  return `${e.region} の地域課題（${fields || '子育て・防災・財政・行政DX・福祉'}）を、有権者向けに分かりやすく整理してください。\n各分野について「現状」「関連しそうなデータ」「候補者に確認したいこと」を中立的にまとめ、出所が不明な情報は『要確認』と明記してください。断定や特定候補への誘導は避けてください。`
+function promptAreaIssues(e: OngoingElection): string {
+  return `${e.region} の地域課題（子育て・教育／防災・安全／財政・税金／行政改革・DX／福祉・高齢者）を、有権者向けに分かりやすく整理してください。\n各分野について「現状」「関連しそうなデータ」「候補者に確認したいこと」を中立的にまとめ、出所が不明な情報は『要確認』と明記してください。断定や特定候補への誘導は避けてください。`
 }
 
 export default function ElectionsPage() {
@@ -266,54 +241,6 @@ export default function ElectionsPage() {
           </table>
         </div>
 
-        {/* 地域課題 5分野（出所のあるもののみ） */}
-        <h2 className='mb-1 text-sm font-bold text-gray-900'>この地域の課題（5分野）</h2>
-        <p className='mb-3 text-[11px] text-gray-400'>子育て・教育／防災・安全／財政・税金／行政改革・DX／福祉・高齢者。<strong>データ出所のある課題のみ</strong>表示します。</p>
-        <div className='mb-6 space-y-2'>
-          {(xt?.issues ?? []).map((is) => {
-            const f = AREA_FIELDS.find((x) => x.key === is.field); if (!f) return null
-            const related = election.cands.filter((c) => f.themes.some((t) => c.themes.includes(t)))
-            return (
-              <div key={is.field} className={card}>
-                <div className='flex items-center justify-between'>
-                  <p className='text-sm font-bold text-gray-900'>{f.name}</p>
-                  <span className='rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700'>{STAGES[is.stage]}</span>
-                </div>
-                <p className='mt-1 text-xs text-gray-700'><span className='text-gray-400'>現状：</span>{is.status}</p>
-                <p className='mt-0.5 text-xs text-gray-700'><span className='text-gray-400'>関連データ：</span>{is.data}</p>
-                {related.length > 0 && (
-                  <p className='mt-0.5 text-[11px] text-gray-600'><span className='text-gray-400'>関連候補者・公約：</span>{related.map((c) => `${c.name}（${ex(c).pledge}）`).join(' / ')}</p>
-                )}
-                <p className='mt-1 text-[10px] text-gray-400'>データ出所：{is.source} ・ 最終更新：{is.updated}</p>
-              </div>
-            )
-          })}
-          {(!xt || xt.issues.length === 0) && <p className='text-sm text-gray-400'>出所付きで登録された地域課題はまだありません。</p>}
-        </div>
-
-        {/* 政策ステータス（4段階・運営更新分のみ） */}
-        {xt && xt.policyStatuses.length > 0 && (
-          <>
-            <h2 className='mb-1 text-sm font-bold text-gray-900'>政策の進捗（4段階）</h2>
-            <p className='mb-3 text-[11px] text-gray-400'>運営が更新した政策のみ表示。{STAGES.join(' → ')}。</p>
-            <div className='mb-6 space-y-3'>
-              {xt.policyStatuses.map((p) => (
-                <div key={p.name} className={card}>
-                  <p className='mb-2 text-sm font-semibold text-gray-900'>{p.name}</p>
-                  <div className='flex items-center gap-1'>
-                    {STAGES.map((s, i) => (
-                      <div key={s} className='flex flex-1 items-center'>
-                        <div className={`flex-1 rounded-full py-1 text-center text-[10px] font-medium ${i <= p.stage ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'}`}>{s}</div>
-                        {i < STAGES.length - 1 && <span className={`px-0.5 text-[10px] ${i < p.stage ? 'text-blue-600' : 'text-gray-300'}`}>›</span>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
         {/* 現職4年レビュー（現職あり＋前回公約・根拠資料がある場合のみ） */}
         {xt?.incumbent && (
           <>
@@ -348,7 +275,7 @@ export default function ElectionsPage() {
         <div className='mb-6 grid gap-2 sm:grid-cols-3'>
           <button onClick={() => copy('deep', promptDeepDive(election, weights))} className='rounded-xl border border-indigo-300 bg-white px-3 py-3 text-xs font-semibold text-indigo-700 hover:bg-indigo-50'>{copied === 'deep' ? '✓ コピーしました' : '🤖 この選挙をAIで深掘りする'}</button>
           <button onClick={() => copy('q', promptQuestions(election))} className='rounded-xl border border-indigo-300 bg-white px-3 py-3 text-xs font-semibold text-indigo-700 hover:bg-indigo-50'>{copied === 'q' ? '✓ コピーしました' : '❓ 候補者に聞く質問をコピー'}</button>
-          <button onClick={() => copy('area', promptAreaIssues(election, xt))} className='rounded-xl border border-indigo-300 bg-white px-3 py-3 text-xs font-semibold text-indigo-700 hover:bg-indigo-50'>{copied === 'area' ? '✓ コピーしました' : '🗂️ 地域課題を整理する'}</button>
+          <button onClick={() => copy('area', promptAreaIssues(election))} className='rounded-xl border border-indigo-300 bg-white px-3 py-3 text-xs font-semibold text-indigo-700 hover:bg-indigo-50'>{copied === 'area' ? '✓ コピーしました' : '🗂️ 地域課題を整理する'}</button>
         </div>
         {shownPrompt && (
           <div className='mb-6'>
@@ -398,9 +325,8 @@ export default function ElectionsPage() {
           <p className='text-lg font-bold text-gray-900'>{muniName}</p>
           <p className='mt-0.5 text-xs text-gray-500'>
             実施中の選挙 {matched.length}件 ・ 登録候補者 {matched.reduce((s, e) => s + e.cands.length, 0)}名
-            {ELECTION_EXTRA[matched[0]?.id ?? '']?.issues.length ? ` ・ 地域課題 ${ELECTION_EXTRA[matched[0].id].issues.length}分野` : ''}
           </p>
-          <p className='mt-2 text-[11px] text-gray-400'>※ 自治体の詳細KPIは持たず、選挙・候補者・地域課題への軽い導線に絞っています。</p>
+          <p className='mt-2 text-[11px] text-gray-400'>※ 自治体の詳細KPIは持たず、選挙・候補者への軽い導線に絞っています。</p>
         </div>
       )}
 
