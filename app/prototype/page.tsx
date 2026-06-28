@@ -16,8 +16,7 @@ const MENU: Menu[] = [
     ],
   },
   {
-    n: 3, icon: '🗳️', title: '候補者を探す', lead: '地域・選挙種別・一致率で探す。', items: [
-      { name: '選挙で選ぶ（〒検索）', href: '/prototype/elections', note: '郵便番号→実施中の選挙→その選挙の候補者を比較・マッチング' },
+    n: 3, icon: '🗳️', title: '候補者を探す', lead: '候補者を一覧から探す。', items: [
       { name: '候補者一覧・検索', href: '/prototype/candidates', note: '個別選挙の候補者一覧を統合。出どころ（公式/本人/未確認）を明示' },
     ],
   },
@@ -59,6 +58,27 @@ export default function PrototypeIndexPage() {
           初期リリースは下記の<strong className='text-gray-700'>5メニュー</strong>に絞り、いきなり寄付・課金には誘導しません。
         </p>
       </div>
+
+      {/* #0 選挙で選ぶ（最重要・最も目立たせる） */}
+      <Link href='/prototype/elections' className='group mb-5 block overflow-hidden rounded-2xl border border-blue-300 bg-gradient-to-br from-blue-600 to-indigo-600 p-6 text-white shadow-md transition-shadow hover:shadow-lg'>
+        <div className='flex items-center gap-4'>
+          <span className='flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-3xl'>🗳️</span>
+          <div className='min-w-0 flex-1'>
+            <div className='flex items-center gap-2'>
+              <span className='rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold tracking-wide'>いちばん使われる入口</span>
+            </div>
+            <h2 className='mt-1 text-xl font-bold leading-tight'>選挙で選ぶ（郵便番号で検索）</h2>
+            <p className='mt-1 text-sm text-blue-50'>〒で、いまあなたの地域の選挙と候補者が見つかる。政策の近さ・実行力・透明性で中立的に比べられます。</p>
+          </div>
+          <span className='hidden shrink-0 text-2xl text-white/70 group-hover:text-white sm:block'>→</span>
+        </div>
+        <div className='mt-4 flex flex-wrap gap-2 text-[11px] font-medium'>
+          <span className='rounded-lg bg-white/15 px-2.5 py-1'>📮 郵便番号で検索</span>
+          <span className='rounded-lg bg-white/15 px-2.5 py-1'>👥 候補者カードで比較</span>
+          <span className='rounded-lg bg-white/15 px-2.5 py-1'>📋 公約比較表</span>
+          <span className='rounded-lg bg-white/15 px-2.5 py-1'>🤖 AIで深掘り（プロンプト）</span>
+        </div>
+      </Link>
 
       {/* 中立性・法令の注意 */}
       <div className='mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-relaxed text-blue-800'>
