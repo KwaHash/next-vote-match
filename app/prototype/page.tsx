@@ -80,6 +80,18 @@ export default function PrototypeIndexPage() {
         </div>
       </Link>
 
+      {/* 選挙AI相談室 / 公開質問ボード */}
+      <div className='mb-5 grid gap-2 sm:grid-cols-2'>
+        <Link href='/prototype/ai-consult' className='group rounded-xl border border-indigo-200 bg-indigo-50/50 p-4 transition-shadow hover:shadow-md'>
+          <p className='text-sm font-bold text-indigo-900'>🤖 選挙AI相談室</p>
+          <p className='mt-0.5 text-[11px] leading-relaxed text-gray-500'>重視テーマで候補者を比べるAIプロンプトを作成（APIを毎回呼ばないコピー方式）。</p>
+        </Link>
+        <Link href='/prototype/questions' className='group rounded-xl border border-blue-200 bg-blue-50/50 p-4 transition-shadow hover:shadow-md'>
+          <p className='text-sm font-bold text-blue-900'>💬 公開質問ボード</p>
+          <p className='mt-0.5 text-[11px] leading-relaxed text-gray-500'>候補者に聞きたい質問を投稿・投票。上位質問は候補者へ送付し回答を公開。</p>
+        </Link>
+      </div>
+
       {/* 中立性・法令の注意 */}
       <div className='mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-relaxed text-blue-800'>
         <p><span className='font-semibold'>中立性・出どころ:</span>{' '}

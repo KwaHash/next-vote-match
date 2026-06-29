@@ -115,3 +115,15 @@
   - **関連YouTube**: クリックで youtube-nocookie 埋め込み（遅延読込）。
   - **SNSシェア**: X/LINE/Facebook/リンクコピー（intent URL）。
   - 注記: 課題・政策提言・段階・動画は運営admin側で登録/更新。
+
+## 選挙AI相談室 + 公開質問ボード（2026-06）— 国民側
+- `app/prototype/_questions.ts`（新規・共有）: 重視テーマ7・追加オプション5・テーマ別質問案バンク・PublicQuestion型/ステータス7種・シード（回答比較サンプル）。
+- `app/prototype/ai-consult/page.tsx`（新規）**選挙AI相談室**:
+  - STEP1 選挙選択（公式リンク・公開質問ボード導線）/ STEP2 重視テーマ＋追加オプション / STEP3 候補者情報（登録済み自動 or 貼り付け、写真OCRは第2段階で無効表示）/ STEP4 **AI比較プロンプト生成＋コピー**（指示書テンプレ・API不使用・フォールバックtextarea）/ STEP5 テーマ別**質問案→編集して投稿**（投稿前確認モーダル＋注意文）。
+  - SNSシェア文生成（X/LINE/FB/コピー、投票依頼文は生成しない）。
+- `app/prototype/questions/page.tsx`（新規）**公開質問ボード**:
+  - 質問一覧（カテゴリ/ステータス/投票/投稿日、投票ボタン1票、回答を見る）。ステータス7種を色分け。
+  - 候補者回答比較表（上位質問×候補者の回答済み/未回答）。
+  - 投稿は即時公開せず「運営確認中」→公開。
+- トップ（`app/prototype/page.tsx`）に「選挙AI相談室」「公開質問ボード」カード導線を追加。store key `publicQuestions` 追加。
+- 連動: 相談室で質問投稿 → ボードに運営確認中で表示（localStorage、本番はSupabase+運営確認）。

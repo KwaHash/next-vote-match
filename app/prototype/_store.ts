@@ -28,6 +28,7 @@ export const STORE_KEYS = {
   donations: 'proto_donations_v1',
   election: 'proto_election_v1',
   recurringSupport: 'proto_recurring_support_v1', // → subscriptions（定期支援の登録）
+  publicQuestions: 'proto_public_questions_v1', // → public_questions / public_question_votes（公開質問ボード）
 } as const
 
 /** 読み込み。データが無い/壊れている場合は fallback を返す。 */
