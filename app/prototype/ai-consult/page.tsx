@@ -27,7 +27,7 @@ export default function AiConsultPage() {
   const [mode, setMode] = useState<'registered' | 'paste'>('registered')
   const [pasted, setPasted] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
-  const [posting, setPosting] = useState<{ category: string; title: string; body: string } | null>(null)
+  const [posting, setPosting] = useState<{ themeKey: string; title: string; body: string } | null>(null)
   const [nickname, setNickname] = useState('')
   const [postedMsg, setPostedMsg] = useState(false)
 
@@ -111,7 +111,7 @@ ${candidateInfo()}
     const q: PublicQuestion = {
       id: `q-${Date.now()}`, electionId: election.id, electionName: election.name,
       title: posting.title.trim() || posting.body.trim().slice(0, 30), body: posting.body.trim(),
-      category: posting.category, nickname: nickname.trim() || '匿名', voteCount: 0, status: '運営確認中',
+      themeKey: posting.themeKey, nickname: nickname.trim() || '匿名', voteCount: 0, status: '運営確認中',
       createdAt: new Date().toISOString().slice(0, 10),
     }
     saveJSON(STORE_KEYS.publicQuestions, [q, ...list])
@@ -192,7 +192,7 @@ ${candidateInfo()}
                   <p className='min-w-0 flex-1 text-xs text-gray-700'>{q}</p>
                   <div className='flex shrink-0 gap-1'>
                     <button onClick={() => copy(`q-${q}`, q)} className='rounded border border-gray-300 px-2 py-1 text-[10px] text-gray-600 hover:bg-white'>{copied === `q-${q}` ? '✓' : 'コピー'}</button>
-                    <button onClick={() => { setPosting({ category: themeName(tk), title: q, body: q }); setPostedMsg(false) }} className='rounded bg-blue-600 px-2 py-1 text-[10px] font-semibold text-white hover:bg-blue-700'>編集して投稿</button>
+                    <button onClick={() => { setPosting({ themeKey: tk, title: q, body: q }); setPostedMsg(false) }} className='rounded bg-blue-600 px-2 py-1 text-[10px] font-semibold text-white hover:bg-blue-700'>編集して投稿</button>
                   </div>
                 </div>
               ))}
@@ -218,7 +218,7 @@ ${candidateInfo()}
         <div className='fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center'>
           <div className='max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5'>
             <h2 className='text-base font-bold text-gray-900'>公開質問ボードに投稿（確認）</h2>
-            <p className='mt-1 text-xs text-gray-400'>{election?.name} ・ カテゴリ：{posting.category}</p>
+            <p className='mt-1 text-xs text-gray-400'>{election?.name} ・ カテゴリ：{themeName(posting.themeKey)}</p>
             <label className='mt-3 block text-xs font-medium text-gray-600'>質問タイトル</label>
             <input value={posting.title} onChange={(e) => setPosting({ ...posting, title: e.target.value })} className='mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm' />
             <label className='mt-3 block text-xs font-medium text-gray-600'>質問本文</label>

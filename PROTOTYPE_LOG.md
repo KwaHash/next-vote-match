@@ -127,3 +127,7 @@
   - 投稿は即時公開せず「運営確認中」→公開。
 - トップ（`app/prototype/page.tsx`）に「選挙AI相談室」「公開質問ボード」カード導線を追加。store key `publicQuestions` 追加。
 - 連動: 相談室で質問投稿 → ボードに運営確認中で表示（localStorage、本番はSupabase+運営確認）。
+
+## 公開質問ボード 正準スキーマ統一（2026-06）— 3アプリ一致
+- `app/prototype/_qboard.ts`（新規・3アプリ同一）: THEMES／QuestionStatus（7・順序）／AnswerStatus（6）／isTop（status導出）／answerPublicLabel／PublicQuestion・CandidateAnswer 型。
+- citizen: `_questions.ts` を _qboard 準拠に（themeKey／candidateId+candidateName／AnswerStatus）。questions・ai-consult を themeName/answerPublicLabel に更新。store key publicQuestions を v2 に。

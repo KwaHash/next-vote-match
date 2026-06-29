@@ -9,7 +9,8 @@
  * 注意: 動く仕様書。保存は localStorage（本番は Supabase + 運営確認）。回答比較はサンプル。
  */
 
-import { Q_STATUS_COLOR, SEED_QUESTIONS, type PublicQuestion } from '../_questions'
+import { SEED_QUESTIONS } from '../_questions'
+import { Q_STATUS_COLOR, themeName, answerPublicLabel, type PublicQuestion } from '../_qboard'
 import { STORE_KEYS, loadJSON, saveJSON } from '../_store'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
@@ -50,10 +51,10 @@ export default function QuestionsPage() {
   const answered = inElection.filter((q) => q.answers && q.answers.length)
   const candCols = useMemo(() => {
     const set = new Set<string>()
-    answered.forEach((q) => q.answers!.forEach((a) => set.add(a.candidate)))
+    answered.forEach((q) => q.answers!.forEach((a) => set.add(a.candidateName)))
     return [...set]
   }, [answered])
-  const ansStatus = (q: PublicQuestion, cand: string) => q.answers?.find((a) => a.candidate === cand)?.status
+  const ansStatus = (q: PublicQuestion, cand: string) => { const a = q.answers?.find((x) => x.candidateName === cand); return a ? answerPublicLabel(a.status) : undefined }
   const ansCls = (s?: string) => s === '回答済み' ? 'text-emerald-600 font-semibold' : s === '未回答' ? 'text-gray-300' : 'text-gray-400'
 
   const card = 'rounded-xl border border-gray-200 bg-white p-4'
@@ -97,7 +98,7 @@ export default function QuestionsPage() {
                 </div>
                 <div className='min-w-0 flex-1'>
                   <div className='flex flex-wrap items-center gap-1.5'>
-                    <span className='rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500'>{q.category}</span>
+                    <span className='rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500'>{themeName(q.themeKey)}</span>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${Q_STATUS_COLOR[q.status]}`}>{q.status}</span>
                   </div>
                   <p className='mt-1 text-sm font-semibold text-gray-900'>{q.title}</p>
@@ -108,13 +109,13 @@ export default function QuestionsPage() {
                   </div>
                   {open === q.id && q.answers && (
                     <div className='mt-2 space-y-1.5 border-t border-gray-100 pt-2'>
-                      {q.answers.map((a) => (
-                        <div key={a.candidate} className='text-xs'>
-                          <span className='font-semibold text-gray-700'>{a.candidate}</span>
-                          <span className={`ml-2 ${a.status === '回答済み' ? 'text-emerald-600' : 'text-gray-400'}`}>{a.status}</span>
-                          {a.answer && <p className='mt-0.5 text-gray-600'>{a.answer}</p>}
+                      {q.answers.map((a) => { const lbl = answerPublicLabel(a.status); return (
+                        <div key={a.candidateName} className='text-xs'>
+                          <span className='font-semibold text-gray-700'>{a.candidateName}</span>
+                          <span className={`ml-2 ${lbl === '回答済み' ? 'text-emerald-600' : 'text-gray-400'}`}>{lbl}</span>
+                          {lbl === '回答済み' && a.answerText && <p className='mt-0.5 text-gray-600'>{a.answerText}</p>}
                         </div>
-                      ))}
+                      ) })}
                     </div>
                   )}
                 </div>
