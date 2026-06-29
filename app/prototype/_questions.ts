@@ -141,4 +141,24 @@ export const SEED_QUESTIONS: PublicQuestion[] = [
     title: '区役所手続きのどこを最初にデジタル化しますか？', body: '住民の待ち時間短縮につながる施策を具体的に。',
     nickname: 'DX好き', voteCount: 41, status: '運営確認中', createdAt: '2026-06-25',
   },
+  {
+    id: 'q-seed-5', electionId: 'osaka-chiji', electionName: '大阪府知事選挙', category: '行政改革・DX',
+    title: '二重行政の解消と行政DXを具体的にどう進めますか？', body: '最初の1年で着手することを教えてください。',
+    nickname: '府民B', voteCount: 120, status: '回答公開中', createdAt: '2026-06-22',
+    answers: [
+      { candidate: '伊藤 さやか', status: '回答済み', answer: '手続きの9割オンライン化を工程化します。' },
+      { candidate: '森本 太一', status: '回答済み', answer: '広域連携で重複事業を整理します。' },
+      { candidate: '大阪 直子', status: '未回答' },
+    ],
+  },
+  {
+    id: 'q-seed-6', electionId: 'osaka-chiji', electionName: '大阪府知事選挙', category: '子育て・教育',
+    title: '子育て支援の所得制限撤廃の財源はどこから確保しますか？', body: '',
+    nickname: '匿名', voteCount: 64, status: '候補者へ送付済み', createdAt: '2026-06-24',
+    answers: [
+      { candidate: '伊藤 さやか', status: '未回答' },
+      { candidate: '森本 太一', status: '回答済み', answer: '歳出の優先順位見直しで対応します。' },
+      { candidate: '大阪 直子', status: '回答済み', answer: '既存事業の再編と国制度の活用で確保します。' },
+    ],
+  },
 ]

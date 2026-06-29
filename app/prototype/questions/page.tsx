@@ -19,23 +19,35 @@ export default function QuestionsPage() {
   const [voted, setVoted] = useState<Set<string>>(new Set())
   const [open, setOpen] = useState<string | null>(null)
   const [tab, setTab] = useState<'list' | 'compare'>('list')
+  const [electionId, setElectionId] = useState('')
 
   useEffect(() => {
     const list = loadJSON<PublicQuestion[]>(STORE_KEYS.publicQuestions, SEED_QUESTIONS)
-    setQuestions(list.length ? list : SEED_QUESTIONS)
+    const arr = list.length ? list : SEED_QUESTIONS
+    setQuestions(arr)
+    setElectionId((prev) => prev || arr[0]?.electionId || '')
   }, [])
 
   const persist = (next: PublicQuestion[]) => { setQuestions(next); saveJSON(STORE_KEYS.publicQuestions, next) }
   const vote = (id: string) => { if (voted.has(id)) return; persist(questions.map((q) => (q.id === id ? { ...q, voteCount: q.voteCount + 1 } : q))); setVoted((s) => new Set(s).add(id)) }
 
+  // 選挙ごとに区切る（選挙タブ）
+  const elections = useMemo(() => {
+    const m = new Map<string, { id: string; name: string; count: number }>()
+    questions.forEach((q) => { const e = m.get(q.electionId); if (e) e.count++; else m.set(q.electionId, { id: q.electionId, name: q.electionName, count: 1 }) })
+    return [...m.values()]
+  }, [questions])
+  const current = elections.find((e) => e.id === electionId) ?? elections[0]
+  const inElection = useMemo(() => questions.filter((q) => q.electionId === (current?.id ?? electionId)), [questions, current, electionId])
+
   // 公開側は「運営確認中」を一覧の最後に薄く、公開系を上に
-  const visible = useMemo(() => [...questions].sort((a, b) => {
+  const visible = useMemo(() => [...inElection].sort((a, b) => {
     const pa = a.status === '運営確認中' ? 1 : 0, pb = b.status === '運営確認中' ? 1 : 0
     return pa - pb || b.voteCount - a.voteCount
-  }), [questions])
+  }), [inElection])
 
-  // 候補者回答比較（回答データのある質問のみ）
-  const answered = questions.filter((q) => q.answers && q.answers.length)
+  // 候補者回答比較（選択中の選挙・回答データのある質問のみ）
+  const answered = inElection.filter((q) => q.answers && q.answers.length)
   const candCols = useMemo(() => {
     const set = new Set<string>()
     answered.forEach((q) => q.answers!.forEach((a) => set.add(a.candidate)))
@@ -52,6 +64,16 @@ export default function QuestionsPage() {
         <div className='mb-2 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600'><span className='h-1.5 w-1.5 rounded-full bg-blue-500' />プロトタイプ / seijiselect.jp</div>
         <h1 className='text-2xl font-bold text-gray-900'>公開質問ボード</h1>
         <p className='mt-1 text-sm text-gray-500'>候補者に聞きたい質問を、有権者みんなで可視化。投票の多い質問は運営が候補者へ送付し、回答済み／未回答を公開します。</p>
+      </div>
+
+      {/* 選挙ごとに区切る */}
+      <div className='mb-4'>
+        <p className='mb-1.5 text-xs font-medium text-gray-500'>選挙を選ぶ</p>
+        <div className='flex flex-wrap gap-2'>
+          {elections.map((e) => (
+            <button key={e.id} onClick={() => { setElectionId(e.id); setOpen(null) }} className={`rounded-lg px-3 py-1.5 text-sm font-semibold ${(current?.id ?? electionId) === e.id ? 'bg-blue-600 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}`}>{e.name}<span className={`ml-1.5 rounded-full px-1.5 text-[10px] ${(current?.id ?? electionId) === e.id ? 'bg-white/20' : 'bg-gray-100 text-gray-500'}`}>{e.count}</span></button>
+          ))}
+        </div>
       </div>
 
       <div className='mb-4 flex items-center justify-between'>
@@ -77,7 +99,6 @@ export default function QuestionsPage() {
                   <div className='flex flex-wrap items-center gap-1.5'>
                     <span className='rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500'>{q.category}</span>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${Q_STATUS_COLOR[q.status]}`}>{q.status}</span>
-                    <span className='text-[10px] text-gray-400'>{q.electionName}</span>
                   </div>
                   <p className='mt-1 text-sm font-semibold text-gray-900'>{q.title}</p>
                   {q.body && q.body !== q.title && <p className='mt-0.5 text-xs text-gray-500'>{q.body}</p>}
@@ -106,7 +127,7 @@ export default function QuestionsPage() {
 
       {tab === 'compare' && (
         <>
-          <h2 className='mb-2 text-sm font-bold text-gray-900'>上位質問への候補者回答（比較）</h2>
+          <h2 className='mb-2 text-sm font-bold text-gray-900'>上位質問への候補者回答（比較）<span className='ml-2 text-xs font-normal text-gray-400'>{current?.name}</span></h2>
           {answered.length === 0 ? <p className={`${card} text-sm text-gray-400`}>比較できる回答データはまだありません。</p> : (
             <div className='overflow-x-auto rounded-xl border border-gray-200 bg-white'>
               <table className='w-full text-sm'>
